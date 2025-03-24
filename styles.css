@@ -104,6 +104,7 @@ body {
   );
   overflow-y: auto;
   padding: 20px;
+  padding-top: 40px; /* Adicionado padding-top maior para evitar corte */
 }
 
 .slide.active {
@@ -733,6 +734,70 @@ ul li {
   max-width: 550px; /* Aumentado de 400px */
 }
 
+/* Tamanhos variados para barras de bits/qubits */
+.scale-bar.scale-tiny {
+  max-width: 60px;
+}
+
+.scale-bar.scale-small {
+  max-width: 100px;
+}
+
+.scale-bar.scale-medium {
+  max-width: 150px;
+}
+
+.scale-bar.scale-large {
+  max-width: 200px;
+}
+
+.scale-bar.scale-xlarge {
+  max-width: 250px;
+}
+
+.scale-bar.classical-tiny {
+  background: linear-gradient(90deg, #2980b9, #3498db);
+  max-width: 30px; /* Reduzido para parecer muito pequeno */
+  width: 30px;
+}
+
+.scale-bar.classical-dot {
+  background: linear-gradient(90deg, #2980b9, #3498db);
+  max-width: 30px;
+  width: 30px;
+  border-radius: 50%;
+  height: 30px;
+  justify-content: center;
+  padding: 0;
+  overflow: visible;
+}
+
+.scale-bar.classical-dot span {
+  position: absolute;
+  left: 35px;
+  width: 100px;
+  color: #3498db;
+}
+
+.scale-bar.quantum-huge {
+  max-width: 350px;
+}
+
+.scale-bar.quantum-massive {
+  max-width: 480px; /* Aumentado para parecer muito grande */
+}
+
+.scale-bar.quantum-extreme {
+  max-width: 550px;
+}
+
+/* Animação para preencher as barras */
+@keyframes fillBarScale {
+  to {
+    width: 100%;
+  }
+}
+
 /* Aplicações diárias */
 .applications-title {
   margin-top: 40px;
@@ -1159,15 +1224,16 @@ ul li {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   padding: 5px 10px;
   backdrop-filter: blur(5px);
   border: 1px solid rgba(100, 255, 218, 0.1);
-  z-index: 10;
+  z-index: 50; /* Aumento do z-index para garantir que está acima */
   gap: 10px;
   width: auto;
   max-width: 300px;
+  transition: all 0.3s ease;
 }
 
 .qubit-slider-minimal {
@@ -1317,6 +1383,42 @@ ul li {
 .result-value {
   font-weight: bold;
   color: var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.result-value.gain-none {
+  color: #aaa;
+}
+.result-value.gain-minimal {
+  color: #64b3f4;
+}
+.result-value.gain-low {
+  color: #3498db;
+}
+.result-value.gain-emerging {
+  color: #2ecc71;
+}
+.result-value.gain-notable {
+  color: #f1c40f;
+}
+.result-value.gain-high {
+  color: #e67e22;
+}
+.result-value.gain-veryhigh {
+  color: #e74c3c;
+}
+.result-value.gain-enormous {
+  color: #9b59b6;
+}
+.result-value.gain-gigantic {
+  color: #8e44ad;
+}
+.result-value.gain-astronomical {
+  color: #ff5252;
+}
+.result-value.gain-incalculable {
+  color: #ff0000;
+  font-weight: bold;
 }
 
 @keyframes highlight-result {
@@ -1327,6 +1429,23 @@ ul li {
   50% {
     background-color: rgba(100, 255, 218, 0.2);
   }
+}
+
+/* Correção para a visualização dos valores do qubit */
+.qubit-value-box {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--accent-color);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 100;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -100%);
+  pointer-events: none; /* Evitar bloquear interações */
 }
 
 /* Estilos para o novo slide de escalabilidade */
@@ -1445,6 +1564,43 @@ ul li {
 
   .cover-content-wrapper {
     height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .slide {
+    padding-top: 60px; /* Mais padding-top em telas menores */
+  }
+
+  .content {
+    padding: 30px 20px; /* Ajustar padding para melhor visualização */
+  }
+
+  /* Ajustes dos controles para dispositivos móveis */
+  .qubit-controls-minimal {
+    bottom: 100px; /* Posicionar mais acima dos controles de navegação */
+    padding: 12px;
+    flex-direction: column; /* Empilhar os controles */
+    gap: 15px;
+    align-items: center;
+  }
+
+  .qubit-slider-minimal {
+    width: 150px; /* Reduzir largura em telas pequenas */
+  }
+
+  .navigation {
+    bottom: 10px; /* Aproximar do fundo para criar espaço */
+    padding: 5px 10px; /* Reduzir tamanho */
+  }
+
+  /* Ajustar escala das barras em telas menores */
+  .scale-bar.quantum-massive {
+    max-width: 280px;
+  }
+
+  .scale-bar.quantum-extreme {
+    max-width: 300px;
   }
 }
 

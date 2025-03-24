@@ -221,7 +221,7 @@
             </div>
           </div>
 
-          <!-- Calculadora de bits/qubits -->
+          <!-- Calculadora de bits/qubits - Corrigida -->
           <div class="state-calculator">
             <h3>Calculadora de Estados</h3>
             <p>Compare a capacidade de processamento entre bits e qubits:</p>
@@ -274,7 +274,9 @@
                 <tr>
                   <td>Ganho de eficiência</td>
                   <td colspan="2">
-                    <span id="gain-result" class="result-value">Nenhum</span>
+                    <span id="gain-result" class="result-value gain-none"
+                      >Nenhum</span
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -298,27 +300,74 @@
           <div class="scale-comparison">
             <h3>Comparação de Escalabilidade</h3>
             <div class="scale-chart">
+              <!-- Barras para 2 bits/qubits -->
+              <div class="scale-row">
+                <div class="units">2 bits/qubits</div>
+                <div class="scale-bar classical scale-tiny">
+                  <span>4 estados</span>
+                </div>
+                <div class="scale-bar quantum scale-tiny">
+                  <span>4 estados</span>
+                </div>
+              </div>
+              <!-- Barras para 5 bits/qubits -->
+              <div class="scale-row">
+                <div class="units">5 bits/qubits</div>
+                <div class="scale-bar classical scale-small">
+                  <span>32 estados</span>
+                </div>
+                <div class="scale-bar quantum scale-small">
+                  <span>32 estados</span>
+                </div>
+              </div>
+              <!-- Barras para 15 bits/qubits -->
+              <div class="scale-row">
+                <div class="units">15 bits/qubits</div>
+                <div class="scale-bar classical scale-medium">
+                  <span>32.768 estados</span>
+                </div>
+                <div class="scale-bar quantum scale-medium">
+                  <span>32.768 estados</span>
+                </div>
+              </div>
+              <!-- Barras para 30 bits/qubits -->
               <div class="scale-row">
                 <div class="units">30 bits/qubits</div>
-                <div class="scale-bar classical">
+                <div class="scale-bar classical scale-large">
                   <span>1 bilhão de estados</span>
                 </div>
-                <div class="scale-bar quantum">
+                <div class="scale-bar quantum scale-large">
                   <span>1 bilhão de estados</span>
                 </div>
               </div>
+              <!-- Barras para 45 bits/qubits -->
               <div class="scale-row">
-                <div class="units">40 bits/qubits</div>
-                <div class="scale-bar classical"><span>1 trilhão</span></div>
+                <div class="units">45 bits/qubits</div>
+                <div class="scale-bar classical scale-xlarge">
+                  <span>35 trilhões</span>
+                </div>
                 <div class="scale-bar quantum quantum-huge">
-                  <span>1 trilhão</span>
+                  <span>35 trilhões</span>
                 </div>
               </div>
+              <!-- Barras para 60 bits/qubits - Ajustado para maior contraste -->
               <div class="scale-row">
-                <div class="units">50 bits/qubits</div>
-                <div class="scale-bar classical-tiny"><span>...</span></div>
+                <div class="units">60 bits/qubits</div>
+                <div class="scale-bar classical-tiny">
+                  <span>1 quintilhão</span>
+                </div>
                 <div class="scale-bar quantum quantum-massive">
-                  <span>1 quadrilhão de estados</span>
+                  <span>1 quintilhão</span>
+                </div>
+              </div>
+              <!-- Barras para 100 bits/qubits (opcional, pode ficar muito grande) -->
+              <div class="scale-row">
+                <div class="units">100 bits/qubits</div>
+                <div class="scale-bar classical-dot">
+                  <span>~10³⁰</span>
+                </div>
+                <div class="scale-bar quantum-extreme">
+                  <span>~10³⁰ estados</span>
                 </div>
               </div>
             </div>
@@ -338,6 +387,13 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>~instantâneo</td>
+                    <td>instantâneo</td>
+                    <td class="gain-none">Nenhum</td>
+                  </tr>
                   <tr>
                     <td>5</td>
                     <td>32</td>
@@ -724,7 +780,11 @@
           </div>
           <div class="slide-number">10/10</div>
         </div>
-      </section>
+
+
+
+
+</html>  </body>    </div>      </section>      </section>
     </div>
 
     <script src="script.js"></script>

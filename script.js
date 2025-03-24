@@ -619,7 +619,7 @@ function initBitsQubits() {
     qubitState.style.width = size + "px";
     qubitState.style.height = size + "px";
 
-    // MODIFICADO: Atualizar o valor do qubit para mostrar ambas as probabilidades
+    // Atualizar o valor do qubit para mostrar ambas as probabilidades
     if (qubitValueBox) {
       // Calcular probabilidades baseadas na posição vertical
       const zeroProb = Math.cos(verticalAngle / 2) ** 2;
@@ -663,7 +663,6 @@ function initBitsQubits() {
 // Nova função para inicializar a calculadora de comparação de estados
 function initStateCalculator() {
   const bitInput = document.getElementById("bit-count");
-  const qubitInput = document.getElementById("qubit-count");
   const calculateBtn = document.getElementById("calculate-states");
   const bitResult = document.getElementById("bit-states");
   const qubitResult = document.getElementById("qubit-states");
@@ -671,36 +670,60 @@ function initStateCalculator() {
   const timeQuantum = document.getElementById("time-quantum");
   const gainResult = document.getElementById("gain-result");
 
-  if (!bitInput || !qubitInput) return; // Se os elementos não existirem, retornar
+  // Verificar se os elementos existem
+  if (!bitInput) {
+    console.error("Elemento bit-count não encontrado");
+    return;
+  }
+
+  if (!calculateBtn) {
+    console.error("Elemento calculate-states não encontrado");
+    return;
+  }
+
+  // Verificar se os elementos de resultado existem
+  if (
+    !bitResult ||
+    !qubitResult ||
+    !timeClassical ||
+    !timeQuantum ||
+    !gainResult
+  ) {
+    console.error("Elementos de resultado não encontrados");
+    return;
+  }
 
   // Função para calcular e exibir os resultados
   function calculateStates() {
+    console.log("Calculando estados...");
+
     const bits = parseInt(bitInput.value) || 0;
-    const qubits = parseInt(qubitInput.value) || 0;
 
     // Validar entrada
-    if (bits < 0 || qubits < 0 || bits > 100 || qubits > 100) {
+    if (bits < 0 || bits > 100) {
       alert("Por favor, insira valores entre 0 e 100");
       return;
     }
 
     // Calcular estados possíveis
-    const bitStates = Math.pow(2, bits);
-    const qubitStates = Math.pow(2, qubits);
+    const states = Math.pow(2, bits);
 
     // Calcular tempos estimados (baseado na tabela fornecida)
     const classicalTime = getClassicalTime(bits);
-    const quantumTime = getQuantumTime(qubits);
+    const quantumTime = getQuantumTime(bits);
 
     // Calcular ganho
     const gain = getGainDescription(bits);
 
     // Exibir resultados com formatação de números grandes
-    bitResult.textContent = formatLargeNumber(bitStates);
-    qubitResult.textContent = formatLargeNumber(qubitStates);
+    bitResult.textContent = formatLargeNumber(states);
+    qubitResult.textContent = formatLargeNumber(states);
     timeClassical.textContent = classicalTime;
     timeQuantum.textContent = quantumTime;
     gainResult.textContent = gain;
+
+    // Adicionar classe de ganho para estilização
+    gainResult.className = "result-value " + getGainClass(bits);
 
     // Animar o resultado
     document.querySelectorAll(".result-value").forEach((el) => {
@@ -709,6 +732,21 @@ function initStateCalculator() {
         el.style.animation = "highlight-result 1s ease-in-out";
       }, 10);
     });
+  }
+
+  // Função auxiliar para obter a classe CSS baseada no ganho
+  function getGainClass(bits) {
+    if (bits <= 5) return "gain-none";
+    if (bits <= 10) return "gain-minimal";
+    if (bits <= 15) return "gain-low";
+    if (bits <= 20) return "gain-emerging";
+    if (bits <= 25) return "gain-notable";
+    if (bits <= 30) return "gain-high";
+    if (bits <= 35) return "gain-veryhigh";
+    if (bits <= 40) return "gain-enormous";
+    if (bits <= 54) return "gain-gigantic";
+    if (bits <= 70) return "gain-astronomical";
+    return "gain-incalculable";
   }
 
   // Funções auxiliares para cálculos baseados na tabela fornecida
@@ -726,11 +764,11 @@ function initStateCalculator() {
     return "maior que a idade do universo";
   }
 
-  function getQuantumTime(qubits) {
-    if (qubits <= 44) return "instantâneo";
-    if (qubits <= 54) return "segundos a minutos";
-    if (qubits <= 60) return "minutos";
-    if (qubits <= 70) return "minutos a horas";
+  function getQuantumTime(bits) {
+    if (bits <= 44) return "instantâneo";
+    if (bits <= 54) return "segundos a minutos";
+    if (bits <= 60) return "minutos";
+    if (bits <= 70) return "minutos a horas";
     return "horas/dias";
   }
 
@@ -762,67 +800,71 @@ function initStateCalculator() {
   }
 
   // Adicionar evento ao botão de calcular
-  if (calculateBtn) {
-    calculateBtn.addEventListener("click", calculateStates);
-  }
+  calculateBtn.addEventListener("click", calculateStates);
 
-  // Adicionar evento para calcular ao pressionar Enter nos inputs
-  [bitInput, qubitInput].forEach((input) => {
-    if (input) {
-      input.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          calculateStates();
-        }
-      });
+  // Adicionar evento para calcular ao pressionar Enter no input
+  bitInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      calculateStates();
     }
   });
 
   // Calcular inicialmente com os valores padrão
-  calculateStates();
+  console.log("Inicializando calculadora com valor padrão");
+  setTimeout(calculateStates, 100);
 }
+
+// Função para atualizar o layout em telas menores
+function updateLayoutForSmallScreens() {
+  const isMobile = window.innerWidth <= 768;
+  const controlsMinimal = document.querySelector(".qubit-controls-minimal");
+
+  if (controlsMinimal) {
+    if (isMobile) {
+      controlsMinimal.style.bottom = "100px";
+      controlsMinimal.style.flexDirection = "column";
+      controlsMinimal.style.gap = "15px";
+      controlsMinimal.style.padding = "12px";
+    } else {
+      controlsMinimal.style.bottom = "150px";
+      controlsMinimal.style.flexDirection = "row";
+      controlsMinimal.style.gap = "10px";
+      controlsMinimal.style.padding = "5px 10px";
+    }
+  }
+}
+
+// Chamar ao carregar e ao redimensionar
+window.addEventListener("load", updateLayoutForSmallScreens);
+window.addEventListener("resize", updateLayoutForSmallScreens);
 
 // Inicializar a comparação de escalabilidade melhorada
 function initScaleComparison() {
-  const classicalBars = document.querySelectorAll(".scale-bar.classical");
-  const quantumBars = document.querySelectorAll(".scale-bar.quantum");
+  const allBars = document.querySelectorAll(".scale-bar");
 
   setTimeout(() => {
-    classicalBars.forEach((bar, index) => {
-      if (bar.classList.contains("classical-tiny")) {
-        bar.style.width = "80px"; // Aumentado
-      } else {
-        switch (index) {
-          case 0:
-            bar.style.width = "150px";
-            break;
-          case 1:
-            bar.style.width = "180px";
-            break;
-          case 2:
-            bar.style.width = "220px";
-            break;
-          default:
-            bar.style.width = "150px";
-        }
-      }
-    });
-
-    quantumBars.forEach((bar, index) => {
-      if (bar.classList.contains("quantum-massive")) {
-        bar.style.width = "550px"; // Aumentado
+    allBars.forEach((bar) => {
+      if (bar.classList.contains("scale-tiny")) {
+        bar.style.width = "60px";
+      } else if (bar.classList.contains("scale-small")) {
+        bar.style.width = "100px";
+      } else if (bar.classList.contains("scale-medium")) {
+        bar.style.width = "150px";
+      } else if (bar.classList.contains("scale-large")) {
+        bar.style.width = "200px";
+      } else if (bar.classList.contains("scale-xlarge")) {
+        bar.style.width = "250px";
+      } else if (bar.classList.contains("classical-tiny")) {
+        bar.style.width = "30px"; // Ainda menor para criar contraste
+      } else if (bar.classList.contains("classical-dot")) {
+        bar.style.width = "20px"; // Ponto pequeno para os 100 bits
+        bar.style.height = "20px";
       } else if (bar.classList.contains("quantum-huge")) {
-        bar.style.width = "350px"; // Aumentado
-      } else {
-        switch (index) {
-          case 0:
-            bar.style.width = "150px";
-            break;
-          case 1:
-            bar.style.width = "180px";
-            break;
-          default:
-            bar.style.width = "150px";
-        }
+        bar.style.width = "350px";
+      } else if (bar.classList.contains("quantum-massive")) {
+        bar.style.width = "480px";
+      } else if (bar.classList.contains("quantum-extreme")) {
+        bar.style.width = "550px";
       }
     });
   }, 500);
