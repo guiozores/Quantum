@@ -31,47 +31,319 @@ function initBlochSphere() {
     ".superposition-particles"
   );
   const quantumState = document.querySelector(".quantum-state");
+  const qubitPositionSlider = document.getElementById("qubit-position");
+  const pauseAnimationBtn = document.getElementById("pause-animation");
+  const playAnimationBtn = document.getElementById("play-animation");
 
-  // Diminuir a velocidade da animação definindo uma duração maior
+  // Configurar a animação da esfera wireframe
   const blochWireframe = document.querySelector(".bloch-wireframe");
   const qubitVector = document.querySelector(".qubit-vector");
 
+  // Inicializar variáveis para controle da interatividade da esfera
+  let isDragging = false;
+  let startRotateX = 0;
+  let startRotateY = 0;
+  let currentRotateX = 0; // Começar alinhado (sem inclinação)
+  let currentRotateY = 0;
+  let autoRotationTimeout;
+  let autoRotationInterval;
+  let isAutoRotating = false;
+
+  // Inicializar com esfera parada e alinhada com o plano XY
   if (blochWireframe) {
-    blochWireframe.style.animation = "rotateSphere 40s infinite linear"; // 2x mais lento (era 20s)
+    blochWireframe.style.animation = "none";
+    blochWireframe.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+
+    // Iniciar rotação automática após 10 segundos
+    autoRotationTimeout = setTimeout(() => {
+      startAutoRotation();
+    }, 10000);
   }
 
   if (qubitVector) {
-    qubitVector.style.animation = "qubitSuperposition 16s infinite ease-in-out"; // 2x mais lento (era 8s)
+    qubitVector.style.animation = "none"; // Sem animação para qubit vector
   }
 
+  // Função para iniciar rotação automática
+  function startAutoRotation() {
+    if (isAutoRotating) return;
+
+    isAutoRotating = true;
+    let rotationSpeed = 0.2;
+
+    autoRotationInterval = setInterval(() => {
+      if (!isDragging) {
+        currentRotateY += rotationSpeed;
+        if (currentRotateY >= 360) currentRotateY -= 360;
+        blochWireframe.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+      }
+    }, 16); // ~60fps
+  }
+
+  // Função para parar rotação automática
+  function stopAutoRotation() {
+    if (!isAutoRotating) return;
+
+    clearInterval(autoRotationInterval);
+    isAutoRotating = false;
+  }
+
+  // Adicionar eventos de mouse para controle da esfera
+  if (blochWireframe && blochWireframe.parentElement) {
+    const blochContainer = blochWireframe.parentElement;
+
+    blochContainer.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+
+      // Parar qualquer rotação automática
+      stopAutoRotation();
+      clearTimeout(autoRotationTimeout);
+
+      isDragging = true;
+      startRotateX = e.clientY;
+      startRotateY = e.clientX;
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+
+      // Calcular o quanto o mouse moveu
+      const deltaY = e.clientY - startRotateX;
+      const deltaX = e.clientX - startRotateY;
+
+      // Atualizar ângulos de rotação (com limites para evitar rotação excessiva no eixo X)
+      const newRotateX = Math.max(
+        -80,
+        Math.min(80, currentRotateX - deltaY * 0.5)
+      );
+      const newRotateY = currentRotateY + deltaX * 0.5;
+
+      // Aplicar a nova rotação
+      blochWireframe.style.transform = `rotateX(${newRotateX}deg) rotateY(${newRotateY}deg)`;
+
+      // Atualizar posição inicial para o próximo movimento
+      startRotateX = e.clientY;
+      startRotateY = e.clientX;
+
+      // Salvar os novos valores
+      currentRotateX = newRotateX;
+      currentRotateY = newRotateY;
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+
+        // Iniciar nova rotação automática após 5 segundos de inatividade
+        autoRotationTimeout = setTimeout(() => {
+          startAutoRotation();
+        }, 5000);
+      }
+    });
+
+    // Evento adicional para lidar com caso de mouse sair da janela
+    document.addEventListener("mouseleave", () => {
+      if (isDragging) {
+        isDragging = false;
+      }
+    });
+  }
+
+  // Estado para controle da animação do ponto qubit
+  let isAnimating = false; // Começar pausado
+  let animationInterval;
+  let manualPosition = 0.0; // Valor inicial no topo (|0⟩)
+  let manualTheta = 0; // Ângulo theta na esfera de Bloch (vertical)
+  let manualPhi = 0; // Ângulo phi na esfera de Bloch (horizontal)
+
+  // Configurar o controle de pausa/reprodução
+  if (pauseAnimationBtn && playAnimationBtn) {
+    // Iniciar com o botão de play visível
+    pauseAnimationBtn.style.display = "none";
+    playAnimationBtn.style.display = "inline-flex";
+
+    pauseAnimationBtn.addEventListener("click", () => {
+      isAnimating = false;
+      pauseAnimationBtn.style.display = "none";
+      playAnimationBtn.style.display = "inline-flex";
+      if (animationInterval) {
+        clearInterval(animationInterval);
+      }
+    });
+
+    playAnimationBtn.addEventListener("click", () => {
+      isAnimating = true;
+      playAnimationBtn.style.display = "none";
+      pauseAnimationBtn.style.display = "inline-flex";
+      startQubitAnimation();
+    });
+  }
+
+  // Configurar o slider para controle manual
+  if (qubitPositionSlider) {
+    // Iniciar com o slider na posição zero
+    qubitPositionSlider.value = manualPosition * 100;
+
+    qubitPositionSlider.addEventListener("input", () => {
+      if (isAnimating) {
+        // Pausar animação ao usar o slider
+        pauseAnimationBtn.click();
+      }
+
+      // Converter valor do slider (0-100) para posição do qubit (0-1)
+      manualPosition = qubitPositionSlider.value / 100;
+      manualTheta = manualPosition * Math.PI; // 0 = |0⟩ (topo), π = |1⟩ (base)
+      updateQubitPosition(manualTheta, manualPhi);
+    });
+  }
+
+  // Remover partículas existentes e adicionar um único ponto qubit
   if (superpositionParticles) {
-    // Criar partículas para efeitos visuais
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement("div");
-      particle.className = "bloch-particle";
-      particle.style.width = `${Math.random() * 4 + 2}px`;
-      particle.style.height = particle.style.width;
-      particle.style.opacity = Math.random() * 0.5 + 0.3;
+    superpositionParticles.innerHTML = ""; // Limpar partículas existentes
 
-      // Posicionar partículas aleatoriamente na esfera
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
-      const r = 125;
+    // Criar um único ponto quântico que se moverá
+    const qubitPoint = document.createElement("div");
+    qubitPoint.className = "single-qubit-point";
+    superpositionParticles.appendChild(qubitPoint);
 
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
+    // Criar o indicador de valor
+    const valueIndicator = document.createElement("div");
+    valueIndicator.className = "qubit-value-indicator";
+    superpositionParticles.appendChild(valueIndicator);
 
-      particle.style.left = `${125 + x}px`;
-      particle.style.top = `${125 + y}px`;
+    // Função para atualizar a posição do qubit usando coordenadas esféricas
+    function updateQubitPosition(theta, phi) {
+      const radius = 125;
 
-      // Adicionar animação aleatória para cada partícula - mais lenta
-      const duration = Math.random() * 16 + 14; // 2x mais lento (era 8 + 7)
-      particle.style.animation = `particleFloat ${duration}s infinite ease-in-out`;
-      particle.style.animationDelay = `${Math.random() * 5}s`;
+      // Converter coordenadas esféricas para cartesianas
+      // theta: ângulo vertical (0 no topo para |0⟩, π na base para |1⟩)
+      // phi: ângulo horizontal (rotação em torno do eixo z)
+      const x = radius * Math.sin(theta) * Math.cos(phi);
+      const y = radius * Math.sin(theta) * Math.sin(phi);
+      const z = radius * Math.cos(theta);
 
-      superpositionParticles.appendChild(particle);
+      // Posicionar o ponto
+      qubitPoint.style.left = `${125 + x}px`;
+      qubitPoint.style.top = `${125 - z}px`; // Invertido para visualização correta
+
+      // Calcular tamanho com base na profundidade Z
+      const size = 10 * (0.7 + (z + radius) / (2 * radius));
+      qubitPoint.style.width = `${size}px`;
+      qubitPoint.style.height = `${size}px`;
+
+      // Exibir o valor como a probabilidade de |0⟩ (baseado no ângulo theta)
+      const zeroProb = Math.cos(theta / 2) ** 2;
+      const oneProb = Math.sin(theta / 2) ** 2;
+      valueIndicator.innerHTML = `|0⟩: ${zeroProb.toFixed(
+        4
+      )}<br>|1⟩: ${oneProb.toFixed(4)}`;
+
+      // Posicionar o indicador próximo ao ponto
+      valueIndicator.style.left = `${
+        parseInt(qubitPoint.style.left) + size + 5
+      }px`;
+      valueIndicator.style.top = `${parseInt(qubitPoint.style.top) - 25}px`;
     }
+
+    // Função para iniciar a animação do ponto qubit
+    function startQubitAnimation() {
+      let animationPhase = 0;
+      let phiRotation = 0;
+
+      // Limpar qualquer intervalo existente
+      if (animationInterval) {
+        clearInterval(animationInterval);
+      }
+
+      // Criar novo intervalo para animação do ponto
+      animationInterval = setInterval(() => {
+        if (!isAnimating) return;
+
+        // Animar theta entre 0 e π para alternar entre |0⟩ e |1⟩
+        animationPhase += 0.01;
+        phiRotation += 0.02; // Rotação em torno do eixo z
+
+        // Usar funções trigonométricas para movimento fluido
+        const theta = ((1 - Math.cos(animationPhase)) / 2) * Math.PI; // Varia entre 0 e π
+        const phi = phiRotation; // Aumenta continuamente para girar em torno do eixo z
+
+        // Atualizar o slider para refletir a posição atual (baseada em theta)
+        if (qubitPositionSlider) {
+          qubitPositionSlider.value = (theta / Math.PI) * 100;
+        }
+
+        // Atualizar posição do qubit
+        updateQubitPosition(theta, phi);
+      }, 50);
+    }
+
+    // Posicionar o qubit inicialmente no topo (|0⟩)
+    updateQubitPosition(manualTheta, manualPhi);
+
+    // Iniciar animação se estiver ativada
+    if (isAnimating) {
+      startQubitAnimation();
+    }
+
+    // Permitir que o qubit seja movido pela esfera com o mouse
+    qubitPoint.style.cursor = "pointer";
+    let isDraggingQubit = false;
+
+    qubitPoint.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      e.stopPropagation(); // Impedir que o evento chegue à esfera
+      isDraggingQubit = true;
+
+      // Pausar animação automática do qubit quando começar a arrastá-lo
+      if (isAnimating) {
+        pauseAnimationBtn.click();
+      }
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDraggingQubit) return;
+
+      // Calcular posição do mouse relativa à esfera
+      const blochRect = blochWireframe.getBoundingClientRect();
+      const centerX = blochRect.left + blochRect.width / 2;
+      const centerY = blochRect.top + blochRect.height / 2;
+
+      // Coordenadas do mouse relativas ao centro da esfera
+      const mouseX = e.clientX - centerX;
+      const mouseY = e.clientY - centerY;
+
+      // Converter para coordenadas esféricas (aproximação simplificada)
+      const radius = 125;
+      const distance = Math.sqrt(mouseX ** 2 + mouseY ** 2);
+
+      // Limitar distância ao raio da esfera
+      const limitedDistance = Math.min(distance, radius);
+      const ratio = limitedDistance / distance || 0;
+
+      // Coordenadas ajustadas
+      const adjustedX = mouseX * ratio;
+      const adjustedY = mouseY * ratio;
+
+      // Calcular ângulos esféricos
+      const phi = Math.atan2(adjustedY, adjustedX);
+      // Ajustar theta baseado na distância do centro
+      const theta = (limitedDistance / radius) * Math.PI;
+
+      manualTheta = theta;
+      manualPhi = phi;
+
+      // Atualizar slider para refletir a posição vertical
+      if (qubitPositionSlider) {
+        qubitPositionSlider.value = (theta / Math.PI) * 100;
+      }
+
+      // Atualizar posição do qubit
+      updateQubitPosition(theta, phi);
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDraggingQubit = false;
+    });
   }
 
   if (quantumState) {
@@ -96,6 +368,32 @@ style.textContent = `
     box-shadow: 0 0 5px var(--accent-color);
     transform-style: preserve-3d;
     pointer-events: none;
+  }
+  
+  .single-qubit-point {
+    position: absolute;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 0 10px var(--accent-color), 0 0 20px rgba(255, 255, 255, 0.5);
+    transform-style: preserve-3d;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    margin-top: -5px;
+    z-index: 10;
+  }
+  
+  .qubit-value-indicator {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--accent-color);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 4px;
+    z-index: 20;
+    white-space: nowrap;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   }
   
   @keyframes particleFloat {
@@ -264,21 +562,53 @@ function initBitsQubits() {
 
   // Animação do qubit na esfera de Bloch
   let qubitState = document.getElementById("qubitState");
-  let angleX = 0;
-  let angleY = 0;
-  let angleZ = 0;
-  let radius = 60; // Raio da esfera
+  let qubitValueBox = null;
 
+  // Adicionar um indicador de valor ao qubit
+  if (qubitState && !document.querySelector(".qubit-value-box")) {
+    qubitValueBox = document.createElement("div");
+    qubitValueBox.className = "qubit-value-box";
+    document.getElementById("qubitSphere").appendChild(qubitValueBox);
+  }
+
+  // Remover elementos antigos e adicionar meridianos corretamente centralizados
+  const qubitSphere = document.getElementById("qubitSphere");
+  if (qubitSphere) {
+    // Remover meridianos existentes
+    qubitSphere
+      .querySelectorAll(".qubit-meridian, .qubit-equator")
+      .forEach((el) => el.remove());
+
+    // Adicionar meridianos corretamente posicionados
+    const meridians = `
+      <div class="qubit-meridian" style="transform: translateX(-50%)"></div>
+      <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(45deg)"></div>
+      <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(90deg)"></div>
+      <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(135deg)"></div>
+      <div class="qubit-equator"></div>
+    `;
+    qubitSphere.insertAdjacentHTML("beforeend", meridians);
+  }
+
+  // Animação controlada para garantir que toque em 0 e 1
+  let animationPhase = 0;
   let qubitInterval = setInterval(() => {
-    // Calcular nova posição na esfera
-    angleX += (Math.random() - 0.5) * 0.5;
-    angleY += (Math.random() - 0.5) * 0.5;
-    angleZ += (Math.random() - 0.5) * 0.5;
+    animationPhase += 0.03;
 
-    // Calcular posição 3D em coordenadas cartesianas
-    let x = radius * Math.sin(angleX) * Math.cos(angleY);
-    let y = radius * Math.sin(angleX) * Math.sin(angleY);
-    let z = radius * Math.cos(angleX);
+    // Usar função senoidal para garantir que toque em 0 e 1
+    const verticalPosition = (Math.sin(animationPhase) + 1) / 2; // Normaliza de -1,1 para 0,1
+
+    // Calcular posição 3D
+    const radius = 60;
+    const horizontalAngle = animationPhase * 0.5; // Gira horizontalmente
+
+    // Converter para ângulo vertical (0 = topo/|0⟩, PI = base/|1⟩)
+    const verticalAngle = verticalPosition * Math.PI;
+
+    // Calcular posição 3D
+    const x = radius * Math.sin(verticalAngle) * Math.cos(horizontalAngle);
+    const y = radius * Math.sin(verticalAngle) * Math.sin(horizontalAngle);
+    const z = radius * Math.cos(verticalAngle);
 
     // Ajustar para espaço 2D mantendo a ilusão 3D
     qubitState.style.left = 50 + x / 2 + "%";
@@ -288,7 +618,22 @@ function initBitsQubits() {
     let size = 12 * (0.8 + (0.4 * (z + radius)) / (2 * radius));
     qubitState.style.width = size + "px";
     qubitState.style.height = size + "px";
-  }, 100);
+
+    // MODIFICADO: Atualizar o valor do qubit para mostrar ambas as probabilidades
+    if (qubitValueBox) {
+      // Calcular probabilidades baseadas na posição vertical
+      const zeroProb = Math.cos(verticalAngle / 2) ** 2;
+      const oneProb = Math.sin(verticalAngle / 2) ** 2;
+      qubitValueBox.innerHTML = `|0⟩: ${zeroProb.toFixed(
+        4
+      )}<br>|1⟩: ${oneProb.toFixed(4)}`;
+      qubitValueBox.style.left = qubitState.style.left;
+      qubitValueBox.style.top = `calc(${qubitState.style.top} - 30px)`;
+    }
+  }, 50);
+
+  // Inicializar a calculadora de estados
+  initStateCalculator();
 
   // Limpar intervalos quando mudar de slide
   document.querySelectorAll(".slide").forEach((slide) => {
@@ -313,6 +658,127 @@ function initBitsQubits() {
       attributes: true,
     });
   });
+}
+
+// Nova função para inicializar a calculadora de comparação de estados
+function initStateCalculator() {
+  const bitInput = document.getElementById("bit-count");
+  const qubitInput = document.getElementById("qubit-count");
+  const calculateBtn = document.getElementById("calculate-states");
+  const bitResult = document.getElementById("bit-states");
+  const qubitResult = document.getElementById("qubit-states");
+  const timeClassical = document.getElementById("time-classical");
+  const timeQuantum = document.getElementById("time-quantum");
+  const gainResult = document.getElementById("gain-result");
+
+  if (!bitInput || !qubitInput) return; // Se os elementos não existirem, retornar
+
+  // Função para calcular e exibir os resultados
+  function calculateStates() {
+    const bits = parseInt(bitInput.value) || 0;
+    const qubits = parseInt(qubitInput.value) || 0;
+
+    // Validar entrada
+    if (bits < 0 || qubits < 0 || bits > 100 || qubits > 100) {
+      alert("Por favor, insira valores entre 0 e 100");
+      return;
+    }
+
+    // Calcular estados possíveis
+    const bitStates = Math.pow(2, bits);
+    const qubitStates = Math.pow(2, qubits);
+
+    // Calcular tempos estimados (baseado na tabela fornecida)
+    const classicalTime = getClassicalTime(bits);
+    const quantumTime = getQuantumTime(qubits);
+
+    // Calcular ganho
+    const gain = getGainDescription(bits);
+
+    // Exibir resultados com formatação de números grandes
+    bitResult.textContent = formatLargeNumber(bitStates);
+    qubitResult.textContent = formatLargeNumber(qubitStates);
+    timeClassical.textContent = classicalTime;
+    timeQuantum.textContent = quantumTime;
+    gainResult.textContent = gain;
+
+    // Animar o resultado
+    document.querySelectorAll(".result-value").forEach((el) => {
+      el.style.animation = "none";
+      setTimeout(() => {
+        el.style.animation = "highlight-result 1s ease-in-out";
+      }, 10);
+    });
+  }
+
+  // Funções auxiliares para cálculos baseados na tabela fornecida
+  function getClassicalTime(bits) {
+    if (bits <= 20) return "~instantâneo";
+    if (bits <= 25) return "~0,03 s";
+    if (bits <= 30) return "~1 s";
+    if (bits <= 35) return "~34 s";
+    if (bits <= 40) return "~17 min";
+    if (bits <= 45) return "~10 horas";
+    if (bits <= 50) return "~11 dias";
+    if (bits <= 55) return "~1 ano";
+    if (bits <= 60) return "~32 anos";
+    if (bits <= 70) return "~32.000 anos";
+    return "maior que a idade do universo";
+  }
+
+  function getQuantumTime(qubits) {
+    if (qubits <= 44) return "instantâneo";
+    if (qubits <= 54) return "segundos a minutos";
+    if (qubits <= 60) return "minutos";
+    if (qubits <= 70) return "minutos a horas";
+    return "horas/dias";
+  }
+
+  function getGainDescription(bits) {
+    if (bits <= 5) return "Nenhum";
+    if (bits <= 10) return "Mínimo";
+    if (bits <= 15) return "Baixo";
+    if (bits <= 20) return "Começa a surgir";
+    if (bits <= 25) return "Notável";
+    if (bits <= 30) return "Alto";
+    if (bits <= 35) return "Muito alto";
+    if (bits <= 40) return "Enorme";
+    if (bits <= 54) return "Gigantesco";
+    if (bits <= 70) return "Astronômico";
+    return "Incalculável";
+  }
+
+  // Formatar números grandes com notação científica ou prefixos
+  function formatLargeNumber(num) {
+    if (num < 1000) return num.toString();
+    if (num < 1e6) return `${(num / 1e3).toFixed(1)} mil`;
+    if (num < 1e9) return `${(num / 1e6).toFixed(1)} milhões`;
+    if (num < 1e12) return `${(num / 1e9).toFixed(1)} bilhões`;
+    if (num < 1e15) return `${(num / 1e12).toFixed(1)} trilhões`;
+    if (num < 1e18) return `${(num / 1e15).toFixed(1)} quadrilhões`;
+    if (num < 1e21) return `${(num / 1e18).toFixed(1)} quintilhões`;
+    if (num < 1e24) return `${(num / 1e21).toFixed(1)} sextilhões`;
+    return `${num.toExponential(2)}`;
+  }
+
+  // Adicionar evento ao botão de calcular
+  if (calculateBtn) {
+    calculateBtn.addEventListener("click", calculateStates);
+  }
+
+  // Adicionar evento para calcular ao pressionar Enter nos inputs
+  [bitInput, qubitInput].forEach((input) => {
+    if (input) {
+      input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          calculateStates();
+        }
+      });
+    }
+  });
+
+  // Calcular inicialmente com os valores padrão
+  calculateStates();
 }
 
 // Inicializar a comparação de escalabilidade melhorada
@@ -433,3 +899,133 @@ document
 
     observer.observe(item);
   });
+
+// Adicionar estilos para a visualização melhorada da esfera no slide 3
+const qubitExtraStyle = document.createElement("style");
+qubitExtraStyle.textContent = `
+  .qubit-sphere {
+    overflow: visible;
+  }
+  
+  .qubit-meridian {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 5px rgba(100, 255, 218, 0.2);
+  }
+  
+  .qubit-equator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
+  }
+  
+  .qubit-value-box {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--accent-color);
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    transform: translate(-50%, -100%);
+    z-index: 100;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+  
+  .qubit-dot {
+    box-shadow: 0 0 10px var(--accent-color), 0 0 15px white;
+    background: radial-gradient(circle at 30% 30%, white, var(--accent-color));
+  }
+`;
+document.head.appendChild(qubitExtraStyle);
+
+// Adicionar estilo para os elementos da calculadora e resultados
+const calculatorStyle = document.createElement("style");
+calculatorStyle.textContent = `
+  .state-calculator {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    border: 1px solid rgba(100, 255, 218, 0.2);
+  }
+  
+  .calculator-inputs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .input-group input {
+    width: 60px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--accent-color);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .calculate-button {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+  
+  .calculate-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(100, 255, 218, 0.4);
+  }
+  
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    table-layout: fixed;
+  }
+  
+  .results-table th, .results-table td {
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .results-table th {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: var(--accent-color);
+  }
+  
+  .result-value {
+    font-weight: bold;
+    color: var(--accent-color);
+  }
+  
+  @keyframes highlight-result {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(100, 255, 218, 0.2); }
+  }
+`;
+document.head.appendChild(calculatorStyle);

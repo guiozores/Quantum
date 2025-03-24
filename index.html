@@ -62,11 +62,36 @@
               <div class="superposition-particles"></div>
             </div>
           </div>
+
           <div class="cover-footer">
             <p class="author">Apresentado por: Seu Nome</p>
             <p class="institution">Universidade Federal do Brasil</p>
           </div>
           <div class="slide-number">1/10</div>
+        </div>
+
+        <!-- Controles para esfera de Bloch (movidos para fora do container principal) -->
+        <div class="qubit-controls-minimal">
+          <input
+            type="range"
+            id="qubit-position"
+            min="0"
+            max="100"
+            value="0"
+            class="qubit-slider-minimal"
+          />
+          <div class="control-buttons-minimal">
+            <button id="pause-animation" class="control-button-minimal">
+              <i class="fas fa-pause"></i>
+            </button>
+            <button
+              id="play-animation"
+              class="control-button-minimal"
+              style="display: none"
+            >
+              <i class="fas fa-play"></i>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -143,7 +168,7 @@
         </div>
       </section>
 
-      <!-- NOVO SLIDE: Bits vs Qubits -->
+      <!-- Slide 3: Bits vs Qubits -->
       <section class="slide" id="slide3">
         <div class="content">
           <h2>Bits vs Qubits: Uma Nova Era</h2>
@@ -195,154 +220,171 @@
               </ul>
             </div>
           </div>
-          <div class="scale-comparison">
-            <h3>Comparação de Escalabilidade</h3>
-            <div class="table-legend">
-              <p>
-                <strong>Unidades:</strong> Número de bits ou qubits utilizados.
-              </p>
-              <p>
-                <strong>Estados:</strong> Número de estados possíveis que podem
-                ser representados com essas unidades.
-              </p>
-              <p>
-                <strong>Comparação:</strong> Mostra visualmente a diferença
-                entre a capacidade de processamento clássico vs. quântico.
-              </p>
-            </div>
-            <div class="scale-chart">
-              <div class="scale-row">
-                <span class="units">5 unidades:</span>
-                <div class="scale-bar classical" data-states="32">
-                  <span>32 estados (bits)</span>
-                </div>
-                <div class="scale-bar quantum" data-states="32">
-                  <span>32 estados (qubits)</span>
-                </div>
-              </div>
-              <div class="scale-row">
-                <span class="units">10 unidades:</span>
-                <div class="scale-bar classical" data-states="1024">
-                  <span>1.024 estados (bits)</span>
-                </div>
-                <div class="scale-bar quantum" data-states="1024">
-                  <span>1.024 estados (qubits)</span>
-                </div>
-              </div>
-              <div class="scale-row">
-                <span class="units">20 unidades:</span>
-                <div class="scale-bar classical" data-states="1048576">
-                  <span>1 milhão de estados (bits)</span>
-                </div>
-                <div
-                  class="scale-bar quantum quantum-huge"
-                  data-states="1048576"
-                >
-                  <span>1 milhão de estados (qubits)</span>
-                </div>
-              </div>
-              <div class="scale-row">
-                <span class="units">50 unidades:</span>
-                <div
-                  class="scale-bar classical classical-tiny"
-                  data-states="huge"
-                >
-                  <span>Bilhões (bits)</span>
-                </div>
-                <div
-                  class="scale-bar quantum quantum-massive"
-                  data-states="huge"
-                >
-                  <span>Quadrilhões de estados (qubits)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="slide-number">3/10</div>
-        </div>
-      </section>
 
-      <!-- NOVO SLIDE: Tabela Bits vs Qubits -->
-      <section class="slide" id="slide4">
-        <div class="content">
-          <h2>Escalabilidade Comparativa</h2>
-          <div class="bit-qubit-table-container">
-            <h3>Escalabilidade Bits vs Qubits</h3>
-            <div class="table-legend">
-              <p>
-                <strong>Número:</strong> Quantidade de bits ou qubits utilizados
-                no sistema.
-              </p>
-              <p>
-                <strong>Bits Clássicos:</strong> Total de estados possíveis em
-                um sistema clássico (igual à quantidade de bits).
-              </p>
-              <p>
-                <strong>Qubits:</strong> Total de estados possíveis em um
-                sistema quântico (cresce exponencialmente: 2<sup>N</sup>).
-              </p>
-              <p>
-                <strong>Diferença de Potência:</strong> Quantas vezes o sistema
-                quântico é mais poderoso que o clássico.
-              </p>
+          <!-- Calculadora de bits/qubits -->
+          <div class="state-calculator">
+            <h3>Calculadora de Estados</h3>
+            <p>Compare a capacidade de processamento entre bits e qubits:</p>
+
+            <div class="calculator-inputs">
+              <div class="input-group">
+                <label for="bit-count">Número de bits/qubits:</label>
+                <input
+                  type="number"
+                  id="bit-count"
+                  min="1"
+                  max="100"
+                  value="5"
+                />
+              </div>
+              <button id="calculate-states" class="calculate-button">
+                Calcular
+              </button>
             </div>
-            <table class="bit-qubit-table">
+
+            <table class="results-table">
               <thead>
                 <tr>
-                  <th>Número</th>
-                  <th>Bits Clássicos<br />(Estados = N)</th>
-                  <th>Qubits<br />(Estados = 2<sup>N</sup>)</th>
-                  <th>Diferença de Potência</th>
+                  <th></th>
+                  <th>Computador Clássico</th>
+                  <th>Computador Quântico</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>2</td>
-                  <td>2 estados</td>
-                  <td>4 estados</td>
-                  <td>2×</td>
+                  <td>Estados possíveis</td>
+                  <td><span id="bit-states" class="result-value">32</span></td>
+                  <td>
+                    <span id="qubit-states" class="result-value">32</span>
+                  </td>
                 </tr>
                 <tr>
-                  <td>5</td>
-                  <td>5 estados</td>
-                  <td>32 estados</td>
-                  <td>6,4×</td>
+                  <td>Tempo de processamento</td>
+                  <td>
+                    <span id="time-classical" class="result-value"
+                      >~instantâneo</span
+                    >
+                  </td>
+                  <td>
+                    <span id="time-quantum" class="result-value"
+                      >instantâneo</span
+                    >
+                  </td>
                 </tr>
                 <tr>
-                  <td>10</td>
-                  <td>10 estados</td>
-                  <td>1.024 estados</td>
-                  <td>102,4×</td>
-                </tr>
-                <tr>
-                  <td>20</td>
-                  <td>20 estados</td>
-                  <td>1.048.576 estados</td>
-                  <td class="highlight-power">52.428×</td>
-                </tr>
-                <tr>
-                  <td>50</td>
-                  <td>50 estados</td>
-                  <td>1.125.899.906.842.624 estados</td>
-                  <td class="highlight-massive">22.517.998.136.852×</td>
-                </tr>
-                <tr>
-                  <td>100</td>
-                  <td>100 estados</td>
-                  <td>1,2676506×10<sup>30</sup> estados</td>
-                  <td class="highlight-massive">Astronomicamente maior!</td>
-                </tr>
-                <tr>
-                  <td>300</td>
-                  <td>300 estados</td>
-                  <td>2,0373383×10<sup>90</sup> estados</td>
-                  <td class="highlight-massive">
-                    Mais que átomos no universo!
+                  <td>Ganho de eficiência</td>
+                  <td colspan="2">
+                    <span id="gain-result" class="result-value">Nenhum</span>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <div class="slide-number">3/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Escalabilidade Quântica -->
+      <section class="slide" id="slide4">
+        <div class="content">
+          <h2>Escalabilidade Exponencial</h2>
+          <p>
+            A comparação entre computadores clássicos e quânticos mostra um
+            ganho de poder computacional que cresce exponencialmente com o
+            número de qubits:
+          </p>
+
+          <div class="scale-comparison">
+            <h3>Comparação de Escalabilidade</h3>
+            <div class="scale-chart">
+              <div class="scale-row">
+                <div class="units">30 bits/qubits</div>
+                <div class="scale-bar classical">
+                  <span>1 bilhão de estados</span>
+                </div>
+                <div class="scale-bar quantum">
+                  <span>1 bilhão de estados</span>
+                </div>
+              </div>
+              <div class="scale-row">
+                <div class="units">40 bits/qubits</div>
+                <div class="scale-bar classical"><span>1 trilhão</span></div>
+                <div class="scale-bar quantum quantum-huge">
+                  <span>1 trilhão</span>
+                </div>
+              </div>
+              <div class="scale-row">
+                <div class="units">50 bits/qubits</div>
+                <div class="scale-bar classical-tiny"><span>...</span></div>
+                <div class="scale-bar quantum quantum-massive">
+                  <span>1 quadrilhão de estados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scalability-table-container">
+            <h3>Comparação detalhada</h3>
+            <div class="table-container">
+              <table class="scalability-table">
+                <thead>
+                  <tr>
+                    <th>N° Bits/Qubits</th>
+                    <th>Estados possíveis</th>
+                    <th>Tempo Computador Clássico</th>
+                    <th>Tempo Computador Quântico</th>
+                    <th>Ganho Real</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>5</td>
+                    <td>32</td>
+                    <td>~instantâneo</td>
+                    <td>instantâneo</td>
+                    <td class="gain-none">Nenhum</td>
+                  </tr>
+                  <tr>
+                    <td>15</td>
+                    <td>32.768</td>
+                    <td>~instantâneo</td>
+                    <td>instantâneo</td>
+                    <td class="gain-low">Baixo</td>
+                  </tr>
+                  <tr>
+                    <td>30</td>
+                    <td>1 bilhão</td>
+                    <td>~1 segundo</td>
+                    <td>instantâneo</td>
+                    <td class="gain-high">Alto</td>
+                  </tr>
+                  <tr>
+                    <td>45</td>
+                    <td>35 trilhões</td>
+                    <td>~10 horas</td>
+                    <td>segundos a minutos</td>
+                    <td class="gain-gigantic">Gigantesco</td>
+                  </tr>
+                  <tr>
+                    <td>60</td>
+                    <td>1 quintilhão</td>
+                    <td>~32 anos</td>
+                    <td>minutos</td>
+                    <td class="gain-astronomical">Astronômico</td>
+                  </tr>
+                  <tr>
+                    <td>100</td>
+                    <td>10³⁰</td>
+                    <td>maior que a idade do universo</td>
+                    <td>horas/dias</td>
+                    <td class="gain-incalculable">Incalculável</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div class="slide-number">4/10</div>
         </div>
       </section>
