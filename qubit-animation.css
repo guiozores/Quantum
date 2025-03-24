@@ -1,0 +1,380 @@
+/* Animações avançadas para qubits */
+
+/* Efeito de partículas para o qubit */
+.qubit-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.qubit-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 5px white;
+}
+
+/* Estados de superposição do qubit */
+.superposition-states {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.superposition-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.6);
+  transform-origin: left center;
+  box-shadow: 0 0 5px white;
+  animation: lineGrow 4s infinite, lineRotate 15s infinite linear;
+}
+
+@keyframes lineGrow {
+  0%,
+  100% {
+    width: 0;
+  }
+  50% {
+    width: 60px;
+  }
+}
+
+@keyframes lineRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Efeito de onda de probabilidade */
+.probability-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.wave-bar {
+  flex: 1;
+  height: 5px;
+  background-color: var(--accent-color);
+  margin: 0 1px;
+  transform-origin: bottom;
+  animation: waveEffect 2s infinite ease-in-out;
+}
+
+@keyframes waveEffect {
+  0%,
+  100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Efeito de entrelaçamento quântico */
+.entanglement-demo {
+  position: relative;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.entangled-qubit {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(100, 255, 218, 0.9),
+    rgba(0, 0, 255, 0.7)
+  );
+  box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+  position: relative;
+  animation: pulseEntanglement 2s infinite alternate;
+}
+
+.entanglement-line {
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(100, 255, 218, 1),
+    rgba(100, 255, 218, 0.3),
+    rgba(100, 255, 218, 1)
+  );
+  animation: pulseLine 2s infinite alternate;
+}
+
+@keyframes pulseEntanglement {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.8);
+  }
+}
+
+@keyframes pulseLine {
+  0% {
+    opacity: 0.3;
+    box-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
+  }
+  100% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(100, 255, 218, 0.8);
+  }
+}
+
+/* Esfera de Bloch 3D Wireframe para o slide de capa */
+.bloch-sphere-3d {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+  perspective: 800px;
+}
+
+.bloch-wireframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: rotateSphere 20s infinite linear;
+}
+
+.wireframe-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(100, 255, 218, 0.5);
+  box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+}
+
+.circle-xy {
+  transform: rotateX(90deg);
+  border-color: rgba(100, 255, 218, 0.4);
+}
+
+.circle-xz {
+  transform: rotateY(90deg);
+  border-color: rgba(255, 100, 218, 0.4);
+}
+
+.circle-yz {
+  transform: rotateZ(0deg);
+  border-color: rgba(218, 255, 100, 0.4);
+}
+
+.axis {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  transform-origin: center left;
+}
+
+.x-axis {
+  width: 150px;
+  height: 1px;
+  transform: translate(-50%, -50%) rotateZ(0deg);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), #64ffda);
+}
+
+.y-axis {
+  width: 150px;
+  height: 1px;
+  transform: translate(-50%, -50%) rotateZ(90deg);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), #ff64da);
+}
+
+.z-axis {
+  width: 1px;
+  height: 150px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(to bottom, #daffda, rgba(255, 255, 255, 0));
+}
+
+.axis-label {
+  position: absolute;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  font-size: 14px;
+}
+
+.x-axis .axis-label {
+  right: -10px;
+  top: -10px;
+}
+
+.y-axis .axis-label {
+  right: -10px;
+  top: -10px;
+}
+
+.z-axis .axis-label {
+  top: -20px;
+  left: -5px;
+}
+
+.point-label {
+  position: absolute;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.zero-label {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.one-label {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.qubit-vector {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  animation: qubitSuperposition 8s infinite ease-in-out;
+}
+
+.qubit-line {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.9),
+    var(--accent-color)
+  );
+  transform-origin: left center;
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+.qubit-point {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  right: -6px;
+  top: -6px;
+  box-shadow: 0 0 15px var(--accent-color);
+}
+
+.quantum-state {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 5px;
+  color: var(--accent-color);
+  font-size: 14px;
+  font-weight: bold;
+  animation: stateChange 8s infinite ease-in-out;
+}
+
+.superposition-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+@keyframes rotateSphere {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(720deg);
+  }
+  /* Duração aumentada no script.js para tornar a animação mais lenta */
+}
+
+@keyframes qubitSuperposition {
+  0% {
+    transform: rotateZ(0deg) rotateX(0deg);
+  }
+  20% {
+    transform: rotateZ(45deg) rotateX(45deg);
+  }
+  40% {
+    transform: rotateZ(180deg) rotateX(90deg);
+  }
+  60% {
+    transform: rotateZ(270deg) rotateX(135deg);
+  }
+  80% {
+    transform: rotateZ(320deg) rotateX(180deg);
+  }
+  100% {
+    transform: rotateZ(360deg) rotateX(360deg);
+  }
+  /* Duração aumentada no script.js para tornar a animação mais lenta */
+}
+
+@keyframes stateChange {
+  0%,
+  15% {
+    content: "|0⟩";
+  }
+  20%,
+  35% {
+    content: "|+⟩";
+  }
+  40%,
+  55% {
+    content: "|1⟩";
+  }
+  60%,
+  75% {
+    content: "|−⟩";
+  }
+  80%,
+  95% {
+    content: "|ψ⟩";
+  }
+  100% {
+    content: "|0⟩";
+  }
+}

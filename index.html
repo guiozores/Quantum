@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processadores Quânticos: Revolucionando a Computação</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="qubit-animation.css" />
+  </head>
+  <body>
+    <div class="presentation-container">
+      <div class="navigation">
+        <button class="nav-btn prev-btn" onclick="prevSlide()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <button class="nav-btn next-btn" onclick="nextSlide()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Slide 1: Capa -->
+      <section class="slide active" id="slide1">
+        <div class="content cover">
+          <h1>Processadores Quânticos</h1>
+          <h2>Revolucionando a Computação no Século XXI</h2>
+          <div class="cover-content-wrapper">
+            <div class="bloch-sphere-3d">
+              <div class="bloch-wireframe">
+                <div class="wireframe-circle circle-xy"></div>
+                <div class="wireframe-circle circle-xz"></div>
+                <div class="wireframe-circle circle-yz"></div>
+                <div class="axis x-axis">
+                  <span class="axis-label">X</span>
+                </div>
+                <div class="axis y-axis">
+                  <span class="axis-label">Y</span>
+                </div>
+                <div class="axis z-axis">
+                  <span class="axis-label">Z</span>
+                </div>
+                <div class="point-label zero-label">|0⟩</div>
+                <div class="point-label one-label">|1⟩</div>
+                <div class="qubit-vector">
+                  <div class="qubit-point"></div>
+                  <div class="qubit-line"></div>
+                </div>
+                <div class="quantum-state"></div>
+              </div>
+              <div class="superposition-particles"></div>
+            </div>
+          </div>
+          <div class="cover-footer">
+            <p class="author">Apresentado por: Seu Nome</p>
+            <p class="institution">Universidade Federal do Brasil</p>
+          </div>
+          <div class="slide-number">1/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Definição -->
+      <section class="slide" id="slide2">
+        <div class="content">
+          <h2>Definição da Tecnologia</h2>
+          <div class="two-columns">
+            <div class="column">
+              <p>
+                Um processador quântico, ou unidade de processamento quântico
+                (QPU), é o componente central de um computador quântico, que:
+              </p>
+              <ul>
+                <li>
+                  Utiliza <span class="highlight">qubits</span> em vez de bits
+                  convencionais
+                </li>
+                <li>
+                  Opera usando princípios da
+                  <span class="highlight">mecânica quântica</span>
+                </li>
+                <li>
+                  Permite <span class="highlight">superposição</span> de estados
+                </li>
+                <li>
+                  Utiliza
+                  <span class="highlight">entrelaçamento quântico</span> entre
+                  qubits
+                </li>
+              </ul>
+
+              <div class="absolute-zero-info">
+                <div class="absolute-zero-icon">
+                  <i class="fas fa-snowflake"></i>
+                </div>
+                <div class="absolute-zero-text">
+                  <h4>Por que Zero Absoluto?</h4>
+                  <p>
+                    Os processadores quânticos precisam operar a temperaturas
+                    próximas a -273,15°C (Zero Absoluto) para evitar que
+                    vibrações térmicas destruam os estados quânticos frágeis. É
+                    mais frio que o espaço sideral!
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="qubit-visualization">
+                <div class="qubit-model">
+                  <div class="qubit-sphere-3d">
+                    <div class="qubit-arrow" id="qubitArrow"></div>
+                  </div>
+                  <div class="qubit-labels">
+                    <div class="qubit-label-0">|0⟩</div>
+                    <div class="qubit-label-1">|1⟩</div>
+                    <div class="qubit-label-plus">|+⟩</div>
+                    <div class="qubit-label-minus">|−⟩</div>
+                  </div>
+                </div>
+                <div class="qubit-explanation">
+                  <h3>Esfera de Bloch</h3>
+                  <p>
+                    Representação visual de um qubit. Diferente de um bit
+                    clássico que só pode estar em 0 ou 1, um qubit pode estar em
+                    qualquer ponto desta esfera, representando superposição de
+                    estados.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-number">2/10</div>
+        </div>
+      </section>
+
+      <!-- NOVO SLIDE: Bits vs Qubits -->
+      <section class="slide" id="slide3">
+        <div class="content">
+          <h2>Bits vs Qubits: Uma Nova Era</h2>
+          <div class="bits-qubits-container">
+            <div class="bit-qubit-column">
+              <h3>Computação Clássica: BITS</h3>
+              <div class="bit-visualization">
+                <div class="bit" id="bit1">0</div>
+                <div class="bit" id="bit2">1</div>
+                <div class="bit" id="bit3">0</div>
+                <div class="bit" id="bit4">1</div>
+              </div>
+              <ul class="comparison-list">
+                <li><strong>Estados:</strong> Binário (0 ou 1)</li>
+                <li>
+                  <strong>Representação:</strong> Transistores ligados ou
+                  desligados
+                </li>
+                <li><strong>Processamento:</strong> Sequencial</li>
+                <li>
+                  <strong>Escala:</strong> Linear (n bits = 2<sup>n</sup>
+                  estados)
+                </li>
+              </ul>
+            </div>
+            <div class="divider">VS</div>
+            <div class="bit-qubit-column">
+              <h3>Computação Quântica: QUBITS</h3>
+              <div class="qubit-sphere-container">
+                <div class="qubit-sphere" id="qubitSphere">
+                  <div class="qubit-dot" id="qubitState"></div>
+                  <div class="qubit-axis x-axis"></div>
+                  <div class="qubit-axis y-axis"></div>
+                  <div class="qubit-axis z-axis"></div>
+                  <div class="qubit-label zero-state">|0⟩</div>
+                  <div class="qubit-label one-state">|1⟩</div>
+                </div>
+              </div>
+              <ul class="comparison-list">
+                <li>
+                  <strong>Estados:</strong> Superposição (0, 1 e combinações)
+                </li>
+                <li><strong>Representação:</strong> Esfera de Bloch</li>
+                <li><strong>Processamento:</strong> Paralelo</li>
+                <li>
+                  <strong>Escala:</strong> Exponencial (n qubits = 2<sup>n</sup>
+                  superposições)
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="scale-comparison">
+            <h3>Comparação de Escalabilidade</h3>
+            <div class="table-legend">
+              <p>
+                <strong>Unidades:</strong> Número de bits ou qubits utilizados.
+              </p>
+              <p>
+                <strong>Estados:</strong> Número de estados possíveis que podem
+                ser representados com essas unidades.
+              </p>
+              <p>
+                <strong>Comparação:</strong> Mostra visualmente a diferença
+                entre a capacidade de processamento clássico vs. quântico.
+              </p>
+            </div>
+            <div class="scale-chart">
+              <div class="scale-row">
+                <span class="units">5 unidades:</span>
+                <div class="scale-bar classical" data-states="32">
+                  <span>32 estados (bits)</span>
+                </div>
+                <div class="scale-bar quantum" data-states="32">
+                  <span>32 estados (qubits)</span>
+                </div>
+              </div>
+              <div class="scale-row">
+                <span class="units">10 unidades:</span>
+                <div class="scale-bar classical" data-states="1024">
+                  <span>1.024 estados (bits)</span>
+                </div>
+                <div class="scale-bar quantum" data-states="1024">
+                  <span>1.024 estados (qubits)</span>
+                </div>
+              </div>
+              <div class="scale-row">
+                <span class="units">20 unidades:</span>
+                <div class="scale-bar classical" data-states="1048576">
+                  <span>1 milhão de estados (bits)</span>
+                </div>
+                <div
+                  class="scale-bar quantum quantum-huge"
+                  data-states="1048576"
+                >
+                  <span>1 milhão de estados (qubits)</span>
+                </div>
+              </div>
+              <div class="scale-row">
+                <span class="units">50 unidades:</span>
+                <div
+                  class="scale-bar classical classical-tiny"
+                  data-states="huge"
+                >
+                  <span>Bilhões (bits)</span>
+                </div>
+                <div
+                  class="scale-bar quantum quantum-massive"
+                  data-states="huge"
+                >
+                  <span>Quadrilhões de estados (qubits)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-number">3/10</div>
+        </div>
+      </section>
+
+      <!-- NOVO SLIDE: Tabela Bits vs Qubits -->
+      <section class="slide" id="slide4">
+        <div class="content">
+          <h2>Escalabilidade Comparativa</h2>
+          <div class="bit-qubit-table-container">
+            <h3>Escalabilidade Bits vs Qubits</h3>
+            <div class="table-legend">
+              <p>
+                <strong>Número:</strong> Quantidade de bits ou qubits utilizados
+                no sistema.
+              </p>
+              <p>
+                <strong>Bits Clássicos:</strong> Total de estados possíveis em
+                um sistema clássico (igual à quantidade de bits).
+              </p>
+              <p>
+                <strong>Qubits:</strong> Total de estados possíveis em um
+                sistema quântico (cresce exponencialmente: 2<sup>N</sup>).
+              </p>
+              <p>
+                <strong>Diferença de Potência:</strong> Quantas vezes o sistema
+                quântico é mais poderoso que o clássico.
+              </p>
+            </div>
+            <table class="bit-qubit-table">
+              <thead>
+                <tr>
+                  <th>Número</th>
+                  <th>Bits Clássicos<br />(Estados = N)</th>
+                  <th>Qubits<br />(Estados = 2<sup>N</sup>)</th>
+                  <th>Diferença de Potência</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2</td>
+                  <td>2 estados</td>
+                  <td>4 estados</td>
+                  <td>2×</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>5 estados</td>
+                  <td>32 estados</td>
+                  <td>6,4×</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>10 estados</td>
+                  <td>1.024 estados</td>
+                  <td>102,4×</td>
+                </tr>
+                <tr>
+                  <td>20</td>
+                  <td>20 estados</td>
+                  <td>1.048.576 estados</td>
+                  <td class="highlight-power">52.428×</td>
+                </tr>
+                <tr>
+                  <td>50</td>
+                  <td>50 estados</td>
+                  <td>1.125.899.906.842.624 estados</td>
+                  <td class="highlight-massive">22.517.998.136.852×</td>
+                </tr>
+                <tr>
+                  <td>100</td>
+                  <td>100 estados</td>
+                  <td>1,2676506×10<sup>30</sup> estados</td>
+                  <td class="highlight-massive">Astronomicamente maior!</td>
+                </tr>
+                <tr>
+                  <td>300</td>
+                  <td>300 estados</td>
+                  <td>2,0373383×10<sup>90</sup> estados</td>
+                  <td class="highlight-massive">
+                    Mais que átomos no universo!
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="slide-number">4/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Objetivos (anteriormente slide 4) -->
+      <section class="slide" id="slide5">
+        <div class="content">
+          <h2>Objetivos da Tecnologia</h2>
+          <div class="objective-grid">
+            <div class="objective-item">
+              <div class="objective-icon"><i class="fas fa-atom"></i></div>
+              <h3>Simulações Químicas</h3>
+              <p>
+                Modelar moléculas complexas para descoberta de novos
+                medicamentos e materiais
+              </p>
+            </div>
+            <div class="objective-item">
+              <div class="objective-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3>Otimização</h3>
+              <p>
+                Resolver problemas complexos de logística, finanças e
+                planejamento
+              </p>
+            </div>
+            <div class="objective-item">
+              <div class="objective-icon"><i class="fas fa-lock"></i></div>
+              <h3>Criptografia</h3>
+              <p>
+                Desenvolver métodos de criptografia resistentes a ataques
+                quânticos
+              </p>
+            </div>
+            <div class="objective-item">
+              <div class="objective-icon"><i class="fas fa-brain"></i></div>
+              <h3>Inteligência Artificial</h3>
+              <p>
+                Acelerar algoritmos de IA e processamento de grandes volumes de
+                dados
+              </p>
+            </div>
+          </div>
+          <div class="slide-number">5/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Vantagens (anteriormente slide 5) -->
+      <section class="slide" id="slide6">
+        <div class="content">
+          <h2>Vantagens do Uso</h2>
+          <div class="advantages-container">
+            <div class="advantage">
+              <h3><i class="fas fa-bolt"></i> Velocidade Exponencial</h3>
+              <p>
+                Para problemas específicos, processadores quânticos oferecem
+                aceleração exponencial comparados a computadores clássicos
+              </p>
+            </div>
+            <div class="advantage">
+              <h3><i class="fas fa-microscope"></i> Simulação Quântica</h3>
+              <p>
+                Capacidade de simular sistemas quânticos com alta precisão, útil
+                para química e física
+              </p>
+            </div>
+            <div class="advantage">
+              <h3><i class="fas fa-puzzle-piece"></i> Otimizações Complexas</h3>
+              <p>
+                Resolução eficiente de problemas de otimização em larga escala
+                para indústria e logística
+              </p>
+            </div>
+            <div class="comparison-chart">
+              <h4>Performance Comparativa (Problema de Fatoração)</h4>
+              <div class="chart">
+                <div class="bar classic" data-value="100">
+                  <span class="label">Clássico</span>
+                  <span class="value">Anos</span>
+                </div>
+                <div class="bar quantum" data-value="10">
+                  <span class="label">Quântico</span>
+                  <span class="value">Minutos</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-number">6/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Instituições (anteriormente slide 6) -->
+      <section class="slide" id="slide7">
+        <div class="content">
+          <h2>Instituições Principais</h2>
+          <div class="institutions-section">
+            <div class="institutions-column">
+              <h3>Universidades Líderes</h3>
+              <ul class="institutions-list">
+                <li>
+                  <span class="institution-name">Universidade de Waterloo</span>
+                  - Instituto de Computação Quântica
+                </li>
+                <li>
+                  <span class="institution-name">Caltech</span> - Instituto para
+                  Informação e Matéria Quântica
+                </li>
+                <li>
+                  <span class="institution-name">MIT</span> - Centro de
+                  Engenharia Quântica
+                </li>
+                <li>
+                  <span class="institution-name">Stanford</span> - Laboratório
+                  de Informação Quântica
+                </li>
+                <li>
+                  <span class="institution-name">Oxford</span> - Centro de
+                  Computação Quântica
+                </li>
+              </ul>
+            </div>
+            <div class="institutions-column">
+              <h3>Empresas Líderes</h3>
+              <ul class="institutions-list companies">
+                <li><span class="institution-name">IBM</span> - IBM Quantum</li>
+                <li>
+                  <span class="institution-name">Google</span> - Google Quantum
+                  AI
+                </li>
+                <li>
+                  <span class="institution-name">Microsoft</span> - Microsoft
+                  Quantum
+                </li>
+                <li>
+                  <span class="institution-name">Intel</span> - Intel Quantum
+                  Computing
+                </li>
+                <li>
+                  <span class="institution-name">Rigetti</span> - Rigetti
+                  Computing
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="slide-number">7/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Casos de Utilização (anteriormente slide 7) -->
+      <section class="slide" id="slide8">
+        <div class="content">
+          <h2>Casos de Utilização</h2>
+          <div class="case-studies">
+            <div class="case">
+              <h3>IBM</h3>
+              <p>Eagle (127 qubits)</p>
+              <div class="case-details">
+                <ul>
+                  <li>Disponível via nuvem para pesquisadores</li>
+                  <li>Utiliza circuitos supercondutores</li>
+                  <li>Aplicado em pesquisas acadêmicas e industriais</li>
+                </ul>
+              </div>
+            </div>
+            <div class="case">
+              <h3>Google</h3>
+              <p>Sycamore</p>
+              <div class="case-details">
+                <ul>
+                  <li>Demonstrou supremacia quântica em 2019</li>
+                  <li>Resolveu um problema em 200 segundos</li>
+                  <li>
+                    Equivalente a 10 septilhões de anos em supercomputadores
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="applications-title">Aplicações Práticas no Dia a Dia</h3>
+          <div class="daily-applications">
+            <div class="application-item">
+              <div class="application-icon"><i class="fas fa-pills"></i></div>
+              <h4>Medicamentos Personalizados</h4>
+              <p>
+                Simulação de moléculas para desenvolver medicamentos específicos
+                para seu perfil genético
+              </p>
+            </div>
+            <div class="application-item">
+              <div class="application-icon"><i class="fas fa-car"></i></div>
+              <h4>Tráfego Otimizado</h4>
+              <p>
+                Redução de congestionamentos e tempo de deslocamento com rotas
+                inteligentes
+              </p>
+            </div>
+            <div class="application-item">
+              <div class="application-icon">
+                <i class="fas fa-cloud-sun"></i>
+              </div>
+              <h4>Previsão Climática</h4>
+              <p>
+                Alertas meteorológicos mais confiáveis para seu planejamento
+                diário
+              </p>
+            </div>
+            <div class="application-item">
+              <div class="application-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <h4>Segurança Digital</h4>
+              <p>
+                Proteção avançada para suas transações bancárias e compras
+                online
+              </p>
+            </div>
+          </div>
+          <div class="slide-number">8/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Caso Microsoft (anteriormente slide 8) -->
+      <section class="slide" id="slide9">
+        <div class="content">
+          <h2>Microsoft Majorana 1</h2>
+          <div class="two-columns">
+            <div class="column">
+              <div class="majorana-specs">
+                <h3>Estado Atual vs. Objetivos</h3>
+                <table class="specs-table">
+                  <tr>
+                    <th>Especificação</th>
+                    <th>Atual (2025)</th>
+                    <th>Meta Futura</th>
+                  </tr>
+                  <tr>
+                    <td>Número de Qubits</td>
+                    <td>8 qubits</td>
+                    <td>1 milhão de qubits</td>
+                  </tr>
+                  <tr>
+                    <td>Tipo</td>
+                    <td colspan="2">Qubits topológicos</td>
+                  </tr>
+                  <tr>
+                    <td>Material</td>
+                    <td colspan="2">Topocondutor</td>
+                  </tr>
+                  <tr>
+                    <td>Integração</td>
+                    <td>Protótipo</td>
+                    <td>Azure Quantum (2030)</td>
+                  </tr>
+                </table>
+                <p class="highlight-box">
+                  <i class="fas fa-lightbulb"></i>
+                  <strong>Destaque:</strong> Apesar do número atual de qubits
+                  (8) parecer pequeno, os qubits topológicos são mais estáveis e
+                  menos suscetíveis a erros, permitindo uma escalabilidade mais
+                  eficiente.
+                </p>
+                <div class="majorana-applications">
+                  <h4>Impacto no Cotidiano:</h4>
+                  <ul>
+                    <li>
+                      <i class="fas fa-heartbeat"></i>
+                      <strong>Saúde:</strong> Descoberta de tratamentos para
+                      câncer e doenças raras
+                    </li>
+                    <li>
+                      <i class="fas fa-bus"></i>
+                      <strong>Transporte:</strong> Redução de 30% no tempo de
+                      espera do transporte público
+                    </li>
+                    <li>
+                      <i class="fas fa-battery-full"></i>
+                      <strong>Energia:</strong> Baterias de celular com duração
+                      5x maior
+                    </li>
+                    <li>
+                      <i class="fas fa-utensils"></i>
+                      <strong>Alimentação:</strong> Otimização da produção
+                      agrícola reduzindo custos
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="image-container">
+                <img
+                  src="https://classic.exame.com/wp-content/uploads/2025/02/Majorana-1-009-4000px.jpg"
+                  alt="Microsoft Majorana 1"
+                />
+                <p class="caption">Processador Majorana 1 - Microsoft</p>
+              </div>
+            </div>
+          </div>
+          <div class="slide-number">9/10</div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Referências (anteriormente slide 9) -->
+      <section class="slide" id="slide10">
+        <div class="content">
+          <h2>Referências Bibliográficas</h2>
+          <div class="references">
+            <ul class="reference-list">
+              <li>
+                "Microsoft unveils Majorana 1, the world's first quantum
+                processor powered by topological qubits," Microsoft Azure
+                Quantum Blog, 19 de fevereiro de 2025.
+              </li>
+              <li>
+                Akhtar, M., et al. "Interferometric single-shot parity
+                measurement in InAs–Al hybrid devices," Nature, 638, 651-655
+                (2025).
+              </li>
+              <li>
+                "Quantum computing," Wikipedia, acessado em 24 de março de 2025.
+              </li>
+              <li>
+                "What is Quantum Computing?" IBM, acessado em 24 de março de
+                2025.
+              </li>
+              <li>
+                Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and
+                Quantum Information. Cambridge University Press.
+              </li>
+              <li>
+                "DOE Explains...Quantum Computing," Departamento de Energia dos
+                EUA, acessado em 24 de março de 2025.
+              </li>
+            </ul>
+          </div>
+          <div class="slide-number">10/10</div>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1175 @@
+:root {
+  --primary-color: #0a192f;
+  --secondary-color: #172a45;
+  --accent-color: #64ffda;
+  --text-color: #e6f1ff;
+  --text-secondary: #8892b0;
+  --slide-transition: 0.5s ease-in-out;
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Roboto", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #111;
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+/* Aumentar o tamanho do container da apresentação */
+.presentation-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Navegação */
+.navigation {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 8px 15px;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 18px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent-color);
+}
+
+.progress-container {
+  width: 200px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--accent-color);
+  width: 12.5%; /* 1/8 como padrão inicial */
+  transition: width 0.3s ease;
+}
+
+/* Slides */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--slide-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Aumentar o conteúdo para ocupar mais espaço */
+.content {
+  max-width: 90%;
+  width: 95%;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 3.5em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: white;
+}
+
+h2 {
+  font-size: 2.2em;
+  color: var(--accent-color);
+}
+
+h3 {
+  font-size: 1.5em;
+  color: white;
+}
+
+p {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}
+
+.slide-number {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+/* Capa */
+.cover {
+  text-align: center;
+}
+
+.qubit-animation {
+  margin: 40px auto;
+  width: 150px;
+  height: 150px;
+  position: relative;
+  perspective: 800px;
+}
+
+.qubit {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  animation: rotate 8s infinite linear;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--accent-color),
+    #4dffd2,
+    #00c3ff,
+    #4a00e0,
+    #8100ca,
+    var(--accent-color)
+  );
+  box-shadow: 0 0 40px rgba(100, 255, 218, 0.6);
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+  100% {
+    transform: rotateY(360deg) rotateX(360deg);
+  }
+}
+
+.author {
+  margin-top: 40px;
+  font-size: 1.4em;
+}
+
+.institution {
+  font-size: 1.2em;
+  color: var(--text-secondary);
+}
+
+/* Layout de duas colunas */
+.two-columns {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.column {
+  flex: 1;
+}
+
+.image-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.caption {
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Listas */
+ul {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+ul li {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.highlight {
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+/* Grid de objetivos */
+.objective-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.objective-item {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 25px;
+  transition: all 0.3s;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.objective-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: var(--accent-color);
+}
+
+.objective-icon {
+  font-size: 2em;
+  color: var(--accent-color);
+  margin-bottom: 15px;
+}
+
+/* Vantagens */
+.advantages-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.advantage {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.advantage h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.advantage h3 i {
+  color: var(--accent-color);
+}
+
+.comparison-chart {
+  grid-column: span 2;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.chart {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bar {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.bar::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1.5s ease;
+}
+
+.bar.classic::before {
+  background-color: #ff7675;
+  width: 0;
+  animation: fillBar 1.5s forwards;
+  animation-delay: 0.5s;
+}
+
+.bar.quantum::before {
+  background-color: var(--accent-color);
+  width: 0;
+  animation: fillBarQuantum 1.5s forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes fillBar {
+  to {
+    width: 90%;
+  }
+}
+
+@keyframes fillBarQuantum {
+  to {
+    width: 10%;
+  }
+}
+
+.bar .label {
+  padding-left: 15px;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+}
+
+.bar .value {
+  margin-left: auto;
+  padding-right: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Instituições */
+.institutions-section {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.institutions-column {
+  flex: 1;
+}
+
+.institutions-list {
+  list-style-type: none;
+  margin: 0;
+}
+
+.institutions-list li {
+  margin-bottom: 15px;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.institutions-list li:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  transform: translateX(5px);
+}
+
+.institution-name {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+/* Casos de uso */
+.case-studies {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.case {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 25px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  transition: all 0.3s;
+}
+
+.case:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-5px);
+}
+
+.case h3 {
+  color: var(--accent-color);
+}
+
+.case p {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+}
+
+.case-details ul {
+  margin-left: 20px;
+}
+
+/* Microsoft Majorana */
+.majorana-specs {
+  margin-top: 20px;
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.specs-table th,
+.specs-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.specs-table th {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--accent-color);
+}
+
+.specs-table tr:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.highlight-box {
+  background-color: rgba(100, 255, 218, 0.1);
+  border-left: 4px solid var(--accent-color);
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 4px;
+}
+
+/* Referências */
+.references {
+  margin-top: 30px;
+}
+
+.reference-list {
+  list-style-type: decimal;
+}
+
+.reference-list li {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+/* Bits vs Qubits Slide */
+.bits-qubits-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+}
+
+.bit-qubit-column {
+  width: 45%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+/* Visualização de bits */
+.bit-visualization {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  gap: 15px;
+}
+
+.bit {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: #333;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s ease;
+}
+
+.bit.active {
+  background-color: var(--accent-color);
+  transform: translateY(-5px);
+}
+
+/* Visualização de qubit - Esfera de Bloch */
+.qubit-sphere-container {
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  perspective: 600px;
+}
+
+.qubit-sphere {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateSlow 15s infinite linear;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(100, 255, 218, 0.9),
+    rgba(0, 0, 255, 0.7),
+    rgba(128, 0, 128, 0.7)
+  );
+  box-shadow: 0 0 30px rgba(100, 255, 218, 0.5);
+}
+
+.qubit-axis {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform-origin: center center;
+}
+
+.x-axis {
+  width: 100%;
+  height: 2px;
+  transform: translate(-50%, -50%) rotateY(90deg);
+}
+
+.y-axis {
+  width: 100%;
+  height: 2px;
+  transform: translate(-50%, -50%);
+}
+
+.z-axis {
+  width: 2px;
+  height: 100%;
+  transform: translate(-50%, -50%) rotateX(90deg);
+}
+
+.qubit-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px white;
+  transition: all 1s ease;
+}
+
+.qubit-label {
+  position: absolute;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 0 5px black;
+}
+
+.zero-state {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.one-state {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes rotateSlow {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+/* Lista de comparação */
+.comparison-list {
+  text-align: left;
+  list-style-type: none;
+  margin-top: 20px;
+}
+
+.comparison-list li {
+  margin-bottom: 10px;
+  padding: 8px 0;
+}
+
+/* Comparação de escalabilidade */
+.scale-comparison {
+  margin-top: 40px;
+}
+
+.scale-chart {
+  margin-top: 20px;
+}
+
+.scale-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.units {
+  width: 140px;
+  text-align: right;
+  padding-right: 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.scale-bar {
+  height: 40px; /* Aumentado de 25px */
+  border-radius: 6px;
+  padding: 0 15px; /* Aumentado de 10px */
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 1.1em; /* Aumentado de 0.9em */
+  font-weight: bold;
+  transition: width 2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 10px; /* Aumentado de 5px */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.scale-bar span {
+  z-index: 2;
+  position: relative;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.scale-bar.classical {
+  background: linear-gradient(90deg, #2980b9, #3498db);
+  width: 0;
+}
+
+.scale-bar.quantum {
+  background: linear-gradient(90deg, #00b09b, #96c93d);
+  width: 0;
+}
+
+.scale-bar.classical-tiny {
+  max-width: 80px; /* Aumentado de 60px */
+}
+
+.scale-bar.quantum-huge {
+  max-width: 350px; /* Aumentado de 250px */
+}
+
+.scale-bar.quantum-massive {
+  max-width: 550px; /* Aumentado de 400px */
+}
+
+/* Aplicações diárias */
+.applications-title {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.daily-applications {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.application-item {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.application-item:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-color);
+}
+
+.application-icon {
+  font-size: 2em;
+  color: var(--accent-color);
+  margin-bottom: 10px;
+}
+
+.application-item h4 {
+  margin-bottom: 10px;
+  font-size: 1em;
+  height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.application-item p {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+/* Majorana aplicações */
+.majorana-applications {
+  margin-top: 20px;
+}
+
+.majorana-applications ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+.majorana-applications li {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.majorana-applications i {
+  color: var(--accent-color);
+  font-size: 1.2em;
+  width: 20px;
+  text-align: center;
+}
+
+/* Tabela Comparativa */
+.bit-qubit-table-container {
+  margin: 40px 0;
+  overflow-x: auto;
+}
+
+.bit-qubit-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.bit-qubit-table th,
+.bit-qubit-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid rgba(100, 255, 218, 0.3);
+}
+
+.bit-qubit-table th {
+  background-color: rgba(0, 0, 0, 0.4);
+  color: var(--accent-color);
+  font-size: 1.1em;
+}
+
+.bit-qubit-table tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.bit-qubit-table tr:hover {
+  background-color: rgba(100, 255, 218, 0.1);
+}
+
+.highlight-power {
+  color: #ff9f43;
+  font-weight: bold;
+}
+
+.highlight-massive {
+  color: #ee5253;
+  font-weight: bold;
+}
+
+/* Melhorar a visualização de qubit no segundo slide */
+.qubit-visualization {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  width: 100%;
+  position: relative;
+  margin: 20px 0;
+}
+
+.qubit-model {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.qubit-sphere-3d {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(100, 255, 218, 0.8),
+    rgba(0, 91, 150, 0.7),
+    rgba(26, 26, 46, 0.9)
+  );
+  box-shadow: 0 0 30px rgba(100, 255, 218, 0.4),
+    inset 0 0 40px rgba(255, 255, 255, 0.2);
+  animation: rotate3D 12s infinite linear;
+  overflow: visible;
+}
+
+.qubit-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 0;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.8),
+    var(--accent-color)
+  );
+  transform: rotate(45deg);
+  z-index: 2;
+}
+
+.qubit-arrow:after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: -8px;
+  border-left: 12px solid var(--accent-color);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
+.qubit-labels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.qubit-label-0 {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+.qubit-label-1 {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+.qubit-label-plus {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+.qubit-label-minus {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+.qubit-explanation {
+  margin-left: 30px;
+  max-width: 300px;
+}
+
+.absolute-zero-info {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.absolute-zero-icon {
+  font-size: 2.5em;
+  color: #00b4d8;
+}
+
+.absolute-zero-text h4 {
+  color: var(--accent-color);
+  margin-bottom: 8px;
+}
+
+@keyframes rotate3D {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+/* Ajustes para a capa */
+.cover-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto;
+  height: 300px;
+}
+
+.cover-footer {
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .two-columns,
+  .institutions-section,
+  .advantages-container,
+  .objective-grid,
+  .case-studies {
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .column,
+  .institutions-column,
+  .advantage {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2 {
+    font-size: 1.8em;
+  }
+
+  .progress-container {
+    width: 100px;
+  }
+
+  .bits-qubits-container {
+    flex-direction: column;
+  }
+
+  .bit-qubit-column {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .divider {
+    margin: 10px 0;
+  }
+
+  .daily-applications {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .scale-bar.quantum-huge {
+    max-width: 250px;
+  }
+
+  .scale-bar.quantum-massive {
+    max-width: 300px;
+  }
+
+  .cover-content-wrapper {
+    height: 250px;
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .qubit-animation {
+    width: 100px;
+    height: 100px;
+  }
+
+  .navigation {
+    bottom: 10px;
+  }
+
+  .bit-visualization {
+    gap: 8px;
+  }
+
+  .bit {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .daily-applications {
+    grid-template-columns: 1fr;
+  }
+
+  .qubit-sphere-container {
+    height: 150px;
+  }
+
+  .qubit-sphere {
+    width: 100px;
+    height: 100px;
+  }
+
+  .scale-bar {
+    height: 30px;
+    font-size: 0.9em;
+  }
+
+  .units {
+    width: 100px;
+    font-size: 0.9em;
+  }
+
+  .qubit-model {
+    width: 150px;
+    height: 150px;
+  }
+
+  .qubit-sphere-3d {
+    width: 150px;
+    height: 150px;
+  }
+
+  .qubit-arrow {
+    width: 75px;
+  }
+
+  .cover-content-wrapper {
+    height: 200px;
+  }
+
+  .cover-footer {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .scale-bar.quantum-massive {
+    max-width: 400px;
+  }
+
+  .qubit-visualization {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .qubit-explanation {
+    margin-left: 0;
+    margin-top: 20px;
+    max-width: 100%;
+  }
+}
