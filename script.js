@@ -30,15 +30,15 @@ document.addEventListener("DOMContentLoaded", () => {
 function getClassicalTime(bits) {
   // Tempo em microssegundos: 2^N x 1μs
   const timeInMicroseconds = Math.pow(2, bits);
-  
+
   // Converter para uma string legível
   return formatTimeFromMicroseconds(timeInMicroseconds);
 }
 
 function getQuantumTime(bits) {
   // Tempo em microssegundos: 2^(N/2) x 0,1μs
-  const timeInMicroseconds = Math.pow(2, bits/2) * 0.1;
-  
+  const timeInMicroseconds = Math.pow(2, bits / 2) * 0.1;
+
   // Converter para uma string legível
   return formatTimeFromMicroseconds(timeInMicroseconds);
 }
@@ -61,15 +61,15 @@ function formatTimeFromMicroseconds(microseconds) {
     // Menos de 1 dia
     const hours = Math.floor(microseconds / 3600000000);
     const minutes = Math.floor((microseconds % 3600000000) / 60000000);
-    return `${hours} hora${hours !== 1 ? 's' : ''}, ${minutes} min`;
+    return `${hours} hora${hours !== 1 ? "s" : ""}, ${minutes} min`;
   } else if (microseconds < 31536000000000) {
     // Menos de 1 ano
     const days = Math.floor(microseconds / 86400000000);
-    return `${days} dia${days !== 1 ? 's' : ''}`;
+    return `${days} dia${days !== 1 ? "s" : ""}`;
   } else if (microseconds < 31536000000000 * 1000) {
     // Menos de 1000 anos
     const years = Math.floor(microseconds / 31536000000000);
-    return `${years} ano${years !== 1 ? 's' : ''}`;
+    return `${years} ano${years !== 1 ? "s" : ""}`;
   } else if (microseconds < 31536000000000 * 1000000) {
     // Menos de 1 milhão de anos
     const years = Math.floor(microseconds / 31536000000000);
@@ -509,7 +509,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 let currentSlide = 1;
-const totalSlides = 11; // Atualizado para 10 slides devido ao novo slide de tabela
+const totalSlides = 12; // Atualizado para 12 slides após a adição do slide de ruído quântico
 
 function initSlides() {
   // Atualizar barra de progresso
@@ -949,7 +949,9 @@ function initStateCalculator() {
     const qubitStatesInfo = document.getElementById("qubit-states-info");
 
     if (bitStatesInfo) bitStatesInfo.innerHTML = "processamento sequencial";
-    if (qubitStatesInfo) qubitStatesInfo.innerHTML = "processamento <span class='simultaneous-processing'>simultâneo</span>";
+    if (qubitStatesInfo)
+      qubitStatesInfo.innerHTML =
+        "processamento <span class='simultaneous-processing'>simultâneo</span>";
 
     timeClassical.textContent = classicalTime;
     timeQuantum.textContent = quantumTime;
@@ -991,15 +993,15 @@ function initStateCalculator() {
   function getClassicalTime(bits) {
     // Tempo em microssegundos: 2^N x 1μs
     const timeInMicroseconds = Math.pow(2, bits);
-    
+
     // Converter para uma string legível
     return formatTimeFromMicroseconds(timeInMicroseconds);
   }
 
   function getQuantumTime(bits) {
     // Tempo em microssegundos: 2^(N/2) x 0,1μs
-    const timeInMicroseconds = Math.pow(2, bits/2) * 0.1;
-    
+    const timeInMicroseconds = Math.pow(2, bits / 2) * 0.1;
+
     // Converter para uma string legível
     return formatTimeFromMicroseconds(timeInMicroseconds);
   }
@@ -1590,134 +1592,138 @@ function fixQubitAxes() {
     zAxis.style.transform = "rotateX(90deg)";
     zAxis.style.backgroundColor = "rgba(100, 100, 255, 0.7)"; // Eixo Z em azul
     zAxis.insertAdjacentHTML("beforeend", '<span class="axis-label">Z</span>');
-}
+  }
 
-// Função para verificar todos os slides disponíveis
-function checkAllSlides() {
-  console.log("Verificando slides disponíveis:");
-  const slides = document.querySelectorAll(".slide");
-  console.log(`Total de slides encontrados: ${slides.length}`);
-  
-  slides.forEach(slide => {
-    console.log(`ID: ${slide.id}, Visível: ${slide.classList.contains("active")}`);
-  });
-  
-  // Verificar especificamente o slide de referências
-  const lastSlide = document.getElementById(`slide${totalSlides}`);
-  if (lastSlide) {
-    console.log(`O último slide (slide${totalSlides}) existe no DOM.`);
-  } else {
-    console.error(`O último slide (slide${totalSlides}) NÃO existe no DOM!`);
-    console.log(`Verificando outros possíveis slides numerados...`);
-    // Verificar slides com números próximos
-    for (let i = totalSlides - 2; i <= totalSlides + 2; i++) {
-      const testSlide = document.getElementById(`slide${i}`);
-      if (testSlide) {
-        console.log(`Slide${i} encontrado.`);
+  // Função para verificar todos os slides disponíveis
+  function checkAllSlides() {
+    console.log("Verificando slides disponíveis:");
+    const slides = document.querySelectorAll(".slide");
+    console.log(`Total de slides encontrados: ${slides.length}`);
+
+    slides.forEach((slide) => {
+      console.log(
+        `ID: ${slide.id}, Visível: ${slide.classList.contains("active")}`
+      );
+    });
+
+    // Verificar especificamente o slide de referências
+    const lastSlide = document.getElementById(`slide${totalSlides}`);
+    if (lastSlide) {
+      console.log(`O último slide (slide${totalSlides}) existe no DOM.`);
+    } else {
+      console.error(`O último slide (slide${totalSlides}) NÃO existe no DOM!`);
+      console.log(`Verificando outros possíveis slides numerados...`);
+      // Verificar slides com números próximos
+      for (let i = totalSlides - 2; i <= totalSlides + 2; i++) {
+        const testSlide = document.getElementById(`slide${i}`);
+        if (testSlide) {
+          console.log(`Slide${i} encontrado.`);
+        }
       }
     }
   }
-}
 
-// Verificar slides quando a página carregar
-document.addEventListener("DOMContentLoaded", () => {
-  initSlides();
-  initBlochSphere();
+  // Verificar slides quando a página carregar
+  document.addEventListener("DOMContentLoaded", () => {
+    initSlides();
+    initBlochSphere();
 
-  // Inicializar a animação do qubit no segundo slide
-  animateQubitArrow();
+    // Inicializar a animação do qubit no segundo slide
+    animateQubitArrow();
 
-  // Inicializar bits e qubits se o slide atual for o slide 3
-  if (currentSlide === 3) {
-    initBitsQubits();
-    initScaleComparison();
-  }
+    // Inicializar bits e qubits se o slide atual for o slide 3
+    if (currentSlide === 3) {
+      initBitsQubits();
+      initScaleComparison();
+    }
 
-  // Adicionar efeitos para a tabela comparativa
-  const tableRows = document.querySelectorAll(".bit-qubit-table tbody tr");
-  tableRows.forEach((row, index) => {
-    row.style.opacity = "0";
-    row.style.transform = "translateY(20px)";
+    // Adicionar efeitos para a tabela comparativa
+    const tableRows = document.querySelectorAll(".bit-qubit-table tbody tr");
+    tableRows.forEach((row, index) => {
+      row.style.opacity = "0";
+      row.style.transform = "translateY(20px)";
 
-    setTimeout(() => {
-      row.style.transition = "all 0.5s ease";
-      row.style.opacity = "1";
-      row.style.transform = "translateY(0)";
-    }, index * 200 + 1000);
+      setTimeout(() => {
+        row.style.transition = "all 0.5s ease";
+        row.style.opacity = "1";
+        row.style.transform = "translateY(0)";
+      }, index * 200 + 1000);
+    });
+
+    // Adicionar verificação de slides
+    checkAllSlides();
+
+    // Adicionar classes de estilo para o processamento no slide 3
+    const bitStatesInfo = document.getElementById("bit-states-info");
+    const qubitStatesInfo = document.getElementById("qubit-states-info");
+
+    if (bitStatesInfo) {
+      bitStatesInfo.innerHTML =
+        "processamento <span class='sequential-processing'>sequencial</span>";
+    }
+
+    if (qubitStatesInfo) {
+      qubitStatesInfo.innerHTML =
+        "processamento <span class='simultaneous-processing'>simultâneo</span>";
+    }
   });
 
-  // Adicionar verificação de slides
-  checkAllSlides();
-  
-  // Adicionar classes de estilo para o processamento no slide 3
-  const bitStatesInfo = document.getElementById("bit-states-info");
-  const qubitStatesInfo = document.getElementById("qubit-states-info");
-  
-  if (bitStatesInfo) {
-    bitStatesInfo.innerHTML = "processamento <span class='sequential-processing'>sequencial</span>";
-  }
-  
-  if (qubitStatesInfo) {
-    qubitStatesInfo.innerHTML = "processamento <span class='simultaneous-processing'>simultâneo</span>";
-  }
-});
+  // Melhorar a função changeSlide para ser mais robusta
+  function changeSlide(newSlide) {
+    console.log(`Tentando mudar para o slide ${newSlide}`);
 
-// Melhorar a função changeSlide para ser mais robusta
-function changeSlide(newSlide) {
-  console.log(`Tentando mudar para o slide ${newSlide}`);
+    // Tentar encontrar o slide atual e remover a classe active
+    const currentSlideElement = document.getElementById(`slide${currentSlide}`);
+    if (!currentSlideElement) {
+      console.error(`Slide atual (${currentSlide}) não encontrado no DOM.`);
+    } else {
+      currentSlideElement.classList.remove("active");
+    }
 
-  // Tentar encontrar o slide atual e remover a classe active
-  const currentSlideElement = document.getElementById(`slide${currentSlide}`);
-  if (!currentSlideElement) {
-    console.error(`Slide atual (${currentSlide}) não encontrado no DOM.`);
-  } else {
-    currentSlideElement.classList.remove("active");
-  }
+    // Atualizar slide atual
+    currentSlide = newSlide;
 
-  // Atualizar slide atual
-  currentSlide = newSlide;
+    // Tentar encontrar o novo slide
+    const nextSlideElement = document.getElementById(`slide${currentSlide}`);
+    if (!nextSlideElement) {
+      console.error(`Novo slide (${currentSlide}) não encontrado no DOM.`);
+      // Tentar recuperar para o primeiro slide
+      currentSlide = 1;
+      const firstSlide = document.getElementById("slide1");
+      if (firstSlide) firstSlide.classList.add("active");
+    } else {
+      nextSlideElement.classList.add("active");
+    }
 
-  // Tentar encontrar o novo slide
-  const nextSlideElement = document.getElementById(`slide${currentSlide}`);
-  if (!nextSlideElement) {
-    console.error(`Novo slide (${currentSlide}) não encontrado no DOM.`);
-    // Tentar recuperar para o primeiro slide
-    currentSlide = 1;
-    const firstSlide = document.getElementById("slide1");
-    if (firstSlide) firstSlide.classList.add("active");
-  } else {
-    nextSlideElement.classList.add("active");
-  }
+    // Atualizar a barra de progresso
+    updateProgressBar();
 
-  // Atualizar a barra de progresso
-  updateProgressBar();
+    // Se for slide 4, reiniciar as animações das barras com velocidade reduzida
+    if (newSlide === 4) {
+      // Selecionamos as barras e removemos qualquer animação anterior
+      const bars = document.querySelectorAll(".bar");
+      bars.forEach((bar) => {
+        bar.style.animation = "none";
+        // Forçar reflow para reiniciar a animação
+        void bar.offsetWidth;
 
-  // Se for slide 4, reiniciar as animações das barras com velocidade reduzida
-  if (newSlide === 4) {
-    // Selecionamos as barras e removemos qualquer animação anterior
-    const bars = document.querySelectorAll(".bar");
-    bars.forEach((bar) => {
-      bar.style.animation = "none";
-      // Forçar reflow para reiniciar a animação
-      void bar.offsetWidth;
+        // Aplicar animações mais lentas
+        setTimeout(() => {
+          if (bar.classList.contains("classic")) {
+            bar.style.animation = "fillBar 3s forwards ease-in-out"; // 3s em vez de 1.5s
+          } else if (bar.classList.contains("quantum")) {
+            bar.style.animation = "fillBarQuantum 3s forwards ease-in-out"; // 3s em vez de 1.5s
+          }
+        }, 10);
+      });
+    }
 
-      // Aplicar animações mais lentas
-      setTimeout(() => {
-        if (bar.classList.contains("classic")) {
-          bar.style.animation = "fillBar 3s forwards ease-in-out"; // 3s em vez de 1.5s
-        } else if (bar.classList.contains("quantum")) {
-          bar.style.animation = "fillBarQuantum 3s forwards ease-in-out"; // 3s em vez de 1.5s
-        }
-      }, 10);
-    });
+    console.log(`Navegou para o slide ${currentSlide}`);
   }
 
-  console.log(`Navegou para o slide ${currentSlide}`);
-}
-
-// Adicionar CSS específico para destacar processamento sequencial e paralelo
-const processingStyles = document.createElement("style");
-processingStyles.textContent = `
+  // Adicionar CSS específico para destacar processamento sequencial e paralelo
+  const processingStyles = document.createElement("style");
+  processingStyles.textContent = `
   .sequential-processing {
     color: #ff7675;
     font-weight: bold;
@@ -1728,165 +1734,182 @@ processingStyles.textContent = `
     font-weight: bold;
   }
 `;
-document.head.appendChild(processingStyles);
+  document.head.appendChild(processingStyles);
 
-// Função para inicializar a nova visualização de tempo de processamento no slide 4
-function initTimeVisualization() {
-  const complexitySlider = document.getElementById('complexity-slider');
-  const bitsValue = document.getElementById('bits-value');
-  const classicalTime = document.getElementById('classical-time');
-  const quantumTime = document.getElementById('quantum-time');
-  const scaleFactor = document.getElementById('scale-factor');
-  
-  // Anéis para visualização do tempo de processamento
-  const classicalRings = document.querySelectorAll('.classical-rings .ring');
-  const quantumRings = document.querySelectorAll('.quantum-rings .ring');
-  
-  if (!complexitySlider || !classicalTime || !quantumTime) {
-    console.error('Elementos da visualização de tempo não encontrados');
-    return;
-  }
+  // Função para inicializar a nova visualização de tempo de processamento no slide 4
+  function initTimeVisualization() {
+    const complexitySlider = document.getElementById("complexity-slider");
+    const bitsValue = document.getElementById("bits-value");
+    const classicalTime = document.getElementById("classical-time");
+    const quantumTime = document.getElementById("quantum-time");
+    const scaleFactor = document.getElementById("scale-factor");
 
-  // Função para atualizar a visualização baseada na complexidade
-  function updateVisualization() {
-    const bits = parseInt(complexitySlider.value);
-    bitsValue.textContent = bits;
-    
-    // Calcular tempos usando as fórmulas padronizadas
-    // Clássico: 2^N × 1μs
-    const classicalTimeInMicroseconds = Math.pow(2, bits);
-    // Quântico: 2^(N/2) × 0,1μs
-    const quantumTimeInMicroseconds = Math.pow(2, bits/2) * 0.1;
-    
-    // Calcular o fator de aceleração
-    const speedupFactor = classicalTimeInMicroseconds / Math.max(0.1, quantumTimeInMicroseconds);
-    
-    // Adicionar classe de atualização para animar a mudança
-    classicalTime.classList.add('updating');
-    quantumTime.classList.add('updating');
-    scaleFactor.classList.add('updating');
-    
-    // Atualizar os valores exibidos usando a função padronizada de formatação
-    classicalTime.textContent = formatTimeFromMicroseconds(classicalTimeInMicroseconds);
-    quantumTime.textContent = formatTimeFromMicroseconds(quantumTimeInMicroseconds);
-    
-    // Formatar o fator de aceleração
-    let speedupText;
-    if (speedupFactor < 1000) speedupText = `${speedupFactor.toFixed(0)}`;
-    else if (speedupFactor < 1000000) speedupText = `${(speedupFactor / 1000).toFixed(1)} mil`;
-    else if (speedupFactor < 1000000000) speedupText = `${(speedupFactor / 1000000).toFixed(1)} milhões`;
-    else if (speedupFactor < 1000000000000) speedupText = `${(speedupFactor / 1000000000).toFixed(1)} bilhões`;
-    else if (speedupFactor < 1000000000000000) speedupText = `${(speedupFactor / 1000000000000).toFixed(1)} trilhões`;
-    else speedupText = "inimaginável";
-    
-    scaleFactor.textContent = `x${speedupText}`;
-    
-    // Remover classe de atualização após a animação
-    setTimeout(() => {
-      classicalTime.classList.remove('updating');
-      quantumTime.classList.remove('updating');
-      scaleFactor.classList.remove('updating');
-    }, 500);
-    
-    // Atualizar os anéis visíveis baseados na complexidade
-    updateRings(classicalRings, bits, 10);
-    updateRings(quantumRings, bits, 20);
-  }
-  
-  // Função para atualizar os anéis de tempo
-  function updateRings(rings, bits, threshold) {
-    const isClassical = rings[0].closest('.classical-rings') !== null;
-    
-    // Lógica diferente para cada tipo de visualização
-    if (isClassical) {
-      // Para computação clássica, os anéis crescem rapidamente com a complexidade
-      rings.forEach((ring, index) => {
-        // Determinar se o anel deve estar ativo baseado na complexidade
-        const shouldBeActive = bits >= threshold + (index * 7);
-        
-        // Escalonar o anel baseado na complexidade (efeito visual)
-        const scale = shouldBeActive ? 1 + ((bits - threshold) / 50) * (index / rings.length) : 1;
-        
-        // Aplicar as alterações
-        ring.style.transform = `translate(-50%, -50%) scale(${scale})`;
-        ring.style.opacity = shouldBeActive ? 1 : 0;
-        
-        // Adicionar/remover classe de animação
-        if (shouldBeActive) ring.classList.add('active');
-        else ring.classList.remove('active');
-      });
-    } else {
-      // Para computação quântica, os anéis crescem muito mais lentamente
-      rings.forEach((ring, index) => {
-        // Determinar se o anel deve estar ativo baseado na complexidade
-        const shouldBeActive = bits >= threshold + (index * 20);
-        
-        // Escalonar o anel baseado na complexidade (efeito visual)
-        const scale = shouldBeActive ? 1 + ((bits - threshold) / 100) * (index / rings.length) : 1;
-        
-        // Aplicar as alterações
-        ring.style.transform = `translate(-50%, -50%) scale(${scale})`;
-        ring.style.opacity = shouldBeActive ? 1 : 0;
-        
-        // Adicionar/remover classe de animação
-        if (shouldBeActive) ring.classList.add('active');
-        else ring.classList.remove('active');
-      });
+    // Anéis para visualização do tempo de processamento
+    const classicalRings = document.querySelectorAll(".classical-rings .ring");
+    const quantumRings = document.querySelectorAll(".quantum-rings .ring");
+
+    if (!complexitySlider || !classicalTime || !quantumTime) {
+      console.error("Elementos da visualização de tempo não encontrados");
+      return;
     }
+
+    // Função para atualizar a visualização baseada na complexidade
+    function updateVisualization() {
+      const bits = parseInt(complexitySlider.value);
+      bitsValue.textContent = bits;
+
+      // Calcular tempos usando as fórmulas padronizadas
+      // Clássico: 2^N × 1μs
+      const classicalTimeInMicroseconds = Math.pow(2, bits);
+      // Quântico: 2^(N/2) × 0,1μs
+      const quantumTimeInMicroseconds = Math.pow(2, bits / 2) * 0.1;
+
+      // Calcular o fator de aceleração
+      const speedupFactor =
+        classicalTimeInMicroseconds / Math.max(0.1, quantumTimeInMicroseconds);
+
+      // Adicionar classe de atualização para animar a mudança
+      classicalTime.classList.add("updating");
+      quantumTime.classList.add("updating");
+      scaleFactor.classList.add("updating");
+
+      // Atualizar os valores exibidos usando a função padronizada de formatação
+      classicalTime.textContent = formatTimeFromMicroseconds(
+        classicalTimeInMicroseconds
+      );
+      quantumTime.textContent = formatTimeFromMicroseconds(
+        quantumTimeInMicroseconds
+      );
+
+      // Formatar o fator de aceleração
+      let speedupText;
+      if (speedupFactor < 1000) speedupText = `${speedupFactor.toFixed(0)}`;
+      else if (speedupFactor < 1000000)
+        speedupText = `${(speedupFactor / 1000).toFixed(1)} mil`;
+      else if (speedupFactor < 1000000000)
+        speedupText = `${(speedupFactor / 1000000).toFixed(1)} milhões`;
+      else if (speedupFactor < 1000000000000)
+        speedupText = `${(speedupFactor / 1000000000).toFixed(1)} bilhões`;
+      else if (speedupFactor < 1000000000000000)
+        speedupText = `${(speedupFactor / 1000000000000).toFixed(1)} trilhões`;
+      else speedupText = "inimaginável";
+
+      scaleFactor.textContent = `x${speedupText}`;
+
+      // Remover classe de atualização após a animação
+      setTimeout(() => {
+        classicalTime.classList.remove("updating");
+        quantumTime.classList.remove("updating");
+        scaleFactor.classList.remove("updating");
+      }, 500);
+
+      // Atualizar os anéis visíveis baseados na complexidade
+      updateRings(classicalRings, bits, 10);
+      updateRings(quantumRings, bits, 20);
+    }
+
+    // Função para atualizar os anéis de tempo
+    function updateRings(rings, bits, threshold) {
+      const isClassical = rings[0].closest(".classical-rings") !== null;
+
+      // Lógica diferente para cada tipo de visualização
+      if (isClassical) {
+        // Para computação clássica, os anéis crescem rapidamente com a complexidade
+        rings.forEach((ring, index) => {
+          // Determinar se o anel deve estar ativo baseado na complexidade
+          const shouldBeActive = bits >= threshold + index * 7;
+
+          // Escalonar o anel baseado na complexidade (efeito visual)
+          const scale = shouldBeActive
+            ? 1 + ((bits - threshold) / 50) * (index / rings.length)
+            : 1;
+
+          // Aplicar as alterações
+          ring.style.transform = `translate(-50%, -50%) scale(${scale})`;
+          ring.style.opacity = shouldBeActive ? 1 : 0;
+
+          // Adicionar/remover classe de animação
+          if (shouldBeActive) ring.classList.add("active");
+          else ring.classList.remove("active");
+        });
+      } else {
+        // Para computação quântica, os anéis crescem muito mais lentamente
+        rings.forEach((ring, index) => {
+          // Determinar se o anel deve estar ativo baseado na complexidade
+          const shouldBeActive = bits >= threshold + index * 20;
+
+          // Escalonar o anel baseado na complexidade (efeito visual)
+          const scale = shouldBeActive
+            ? 1 + ((bits - threshold) / 100) * (index / rings.length)
+            : 1;
+
+          // Aplicar as alterações
+          ring.style.transform = `translate(-50%, -50%) scale(${scale})`;
+          ring.style.opacity = shouldBeActive ? 1 : 0;
+
+          // Adicionar/remover classe de animação
+          if (shouldBeActive) ring.classList.add("active");
+          else ring.classList.remove("active");
+        });
+      }
+    }
+
+    // Adicionar evento ao slider
+    complexitySlider.addEventListener("input", updateVisualization);
+
+    // Inicializar visualização
+    updateVisualization();
+
+    // Adicionar animação inicial para chamar a atenção
+    setTimeout(() => {
+      // Simular movimento do slider para demonstração
+      const animate = (value, duration) => {
+        const start = parseInt(complexitySlider.value);
+        const diff = value - start;
+        const startTime = performance.now();
+
+        function step(currentTime) {
+          const elapsedTime = currentTime - startTime;
+          if (elapsedTime < duration) {
+            const progress = elapsedTime / duration;
+            const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease in-out
+            complexitySlider.value = start + diff * easeProgress;
+            updateVisualization();
+            requestAnimationFrame(step);
+          } else {
+            complexitySlider.value = value;
+            updateVisualization();
+          }
+        }
+
+        requestAnimationFrame(step);
+      };
+
+      // Animação sequencial para demonstrar o efeito
+      animate(20, 1000); // Começar pequeno
+      setTimeout(() => animate(45, 2000), 1500); // Crescer bastante
+      setTimeout(() => animate(70, 1500), 4000); // Crescer mais
+      setTimeout(() => animate(100, 2000), 6000); // Mostrar caso extremo
+      setTimeout(() => animate(30, 2000), 9000); // Voltar ao valor inicial
+    }, 1000);
   }
 
-  // Adicionar evento ao slider
-  complexitySlider.addEventListener('input', updateVisualization);
-  
-  // Inicializar visualização
-  updateVisualization();
-  
-  // Adicionar animação inicial para chamar a atenção
-  setTimeout(() => {
-    // Simular movimento do slider para demonstração
-    const animate = (value, duration) => {
-      const start = parseInt(complexitySlider.value);
-      const diff = value - start;
-      const startTime = performance.now();
-      
-      function step(currentTime) {
-        const elapsedTime = currentTime - startTime;
-        if (elapsedTime < duration) {
-          const progress = elapsedTime / duration;
-                   const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease in-out
-          complexitySlider.value = start + diff * easeProgress;
-          updateVisualization();
-          requestAnimationFrame(step);
-        } else {
-          complexitySlider.value = value;
-          updateVisualization();
+  // Adicionar inicialização da visualização de tempo quando o slide 4 é ativado
+  document.querySelectorAll(".slide").forEach((slide) => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.attributeName === "class" &&
+          slide.classList.contains("active")
+        ) {
+          if (slide.id === "slide4") {
+            console.log("Slide 4 ativado, inicializando visualização de tempo");
+            initTimeVisualization();
+          }
         }
-      }
-      
-      requestAnimationFrame(step);
-    };
-    
-    // Animação sequencial para demonstrar o efeito
-    animate(20, 1000); // Começar pequeno
-    setTimeout(() => animate(45, 2000), 1500); // Crescer bastante
-    setTimeout(() => animate(70, 1500), 4000); // Crescer mais
-    setTimeout(() => animate(100, 2000), 6000); // Mostrar caso extremo
-    setTimeout(() => animate(30, 2000), 9000); // Voltar ao valor inicial
-  }, 1000);
-}
-
-// Adicionar inicialização da visualização de tempo quando o slide 4 é ativado
-document.querySelectorAll(".slide").forEach((slide) => {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.attributeName === "class" && slide.classList.contains("active")) {
-        if (slide.id === "slide4") {
-          console.log("Slide 4 ativado, inicializando visualização de tempo");
-          initTimeVisualization();
-        }
-      }
+      });
     });
-  });
 
-  observer.observe(slide, { attributes: true });
-}); }
+    observer.observe(slide, { attributes: true });
+  });
+}
