@@ -1862,35 +1862,17 @@ function fixQubitAxes() {
 
     // Adicionar animação inicial para chamar a atenção
     setTimeout(() => {
-      // Simular movimento do slider para demonstração
-      const animate = (value, duration) => {
-        const start = parseInt(complexitySlider.value);
-        const diff = value - start;
-        const startTime = performance.now();
+      const start = +complexitySlider.value;
+      const end = 100;
+      const duration = 30000;
+      const startTime = performance.now();
 
-        function step(currentTime) {
-          const elapsedTime = currentTime - startTime;
-          if (elapsedTime < duration) {
-            const progress = elapsedTime / duration;
-            const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease in-out
-            complexitySlider.value = start + diff * easeProgress;
-            updateVisualization();
-            requestAnimationFrame(step);
-          } else {
-            complexitySlider.value = value;
-            updateVisualization();
-          }
-        }
-
-        requestAnimationFrame(step);
-      };
-
-      // Animação sequencial para demonstrar o efeito
-      animate(20, 1000); // Começar pequeno
-      setTimeout(() => animate(45, 2000), 1500); // Crescer bastante
-      setTimeout(() => animate(70, 1500), 4000); // Crescer mais
-      setTimeout(() => animate(100, 2000), 6000); // Mostrar caso extremo
-      setTimeout(() => animate(30, 2000), 9000); // Voltar ao valor inicial
+      requestAnimationFrame(function animate(now) {
+        const t = Math.min(1, (now - startTime) / duration);
+        complexitySlider.value = start + (end - start) * t;
+        updateVisualization();
+        if (t < 1) requestAnimationFrame(animate);
+      });
     }, 1000);
   }
 

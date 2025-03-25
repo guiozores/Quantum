@@ -1629,13 +1629,13 @@ ul li {
 
 .x-axis {
   bottom: 0;
-  left: 0;
+  left: 70px;
   width: 100%;
   height: 2px;
 }
 
 .y-axis {
-  top: 0;
+  top: 50px;
   left: 0;
   width: 2px;
   height: 100%;
