@@ -322,85 +322,134 @@
         <div class="content">
           <h2>Tempo de Processamento: Crescimento Exponencial</h2>
 
-          <!-- Nova visualização de corrida de tempo -->
-          <div class="time-race-container">
-            <div class="time-race-header">
-              <h3>Desafio de Processamento: Clássico vs. Quântico</h3>
+          <!-- Nova visualização de tempo de processamento -->
+          <div class="time-visualization-container">
+            <div class="time-visualization-header">
+              <h3>Visualizando a Explosão Exponencial</h3>
               <p>
-                O gráfico abaixo demonstra como o tempo de processamento cresce
-                drasticamente diferente entre os dois sistemas.
+                Observe como o tempo necessário para resolver problemas
+                complexos escala drasticamente diferente entre sistemas
+                clássicos e quânticos.
               </p>
             </div>
 
-            <div class="race-tracks">
-              <div class="race-track classical">
-                <div class="racer-label">Clássico</div>
-                <div class="racer-container">
-                  <div class="racer classic-racer">
-                    <i class="fas fa-desktop"></i>
-                  </div>
-                  <div class="progress-path">
-                    <div class="milestone" data-bits="10">10 bits</div>
-                    <div class="milestone" data-bits="20">20 bits</div>
-                    <div class="milestone" data-bits="30">30 bits</div>
-                    <div class="milestone" data-bits="40">40 bits</div>
-                    <div class="milestone" data-bits="50">50 bits</div>
+            <div class="complexity-slider-container">
+              <div class="complexity-label">Complexidade do problema:</div>
+              <input
+                type="range"
+                id="complexity-slider"
+                min="15"
+                max="100"
+                value="30"
+                class="complexity-range"
+              />
+              <div class="complexity-value">
+                <span id="bits-value">30</span> bits/qubits
+              </div>
+            </div>
+
+            <div class="quantum-vs-classical">
+              <div class="processing-column classical">
+                <h4>Computador Clássico</h4>
+                <div class="processing-visualization">
+                  <div class="time-rings-container">
+                    <div class="time-rings classical-rings">
+                      <div class="ring ring-1"></div>
+                      <div class="ring ring-2"></div>
+                      <div class="ring ring-3"></div>
+                      <div class="ring ring-4"></div>
+                      <div class="ring ring-5"></div>
+                      <div class="ring ring-6"></div>
+                      <div class="ring ring-7"></div>
+                    </div>
+                    <div class="time-center">
+                      <span class="time-value" id="classical-time"
+                        >1 segundo</span
+                      >
+                    </div>
                   </div>
                 </div>
-                <div class="time-indicator">
-                  Tempo: <span id="classic-time">0.00s</span>
+                <div class="processing-description">
+                  <div class="description-icon">
+                    <i class="fas fa-microchip"></i>
+                  </div>
+                  <p>
+                    Processamento <strong>sequencial</strong>: cada estado
+                    precisa ser verificado individualmente.
+                  </p>
                 </div>
               </div>
 
-              <div class="race-track quantum">
-                <div class="racer-label">Quântico</div>
-                <div class="racer-container">
-                  <div class="racer quantum-racer">
+              <div class="comparison-divider">
+                <div class="divider-line"></div>
+                <div class="comparison-scales">
+                  <div class="scale-icon">
+                    <i class="fas fa-balance-scale"></i>
+                  </div>
+                  <div class="scale-factor" id="scale-factor">
+                    x1.000.000.000
+                  </div>
+                  <div class="scale-text">vezes mais rápido</div>
+                </div>
+                <div class="divider-line"></div>
+              </div>
+
+              <div class="processing-column quantum">
+                <h4>Computador Quântico</h4>
+                <div class="processing-visualization">
+                  <div class="time-rings-container">
+                    <div class="time-rings quantum-rings">
+                      <div class="ring ring-1"></div>
+                      <div class="ring ring-2"></div>
+                      <div class="ring ring-3"></div>
+                    </div>
+                    <div class="time-center">
+                      <span class="time-value" id="quantum-time"
+                        >instantâneo</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="processing-description">
+                  <div class="description-icon">
                     <i class="fas fa-atom"></i>
                   </div>
-                  <div class="progress-path">
-                    <div class="milestone" data-bits="10">10 qubits</div>
-                    <div class="milestone" data-bits="20">20 qubits</div>
-                    <div class="milestone" data-bits="30">30 qubits</div>
-                    <div class="milestone" data-bits="40">40 qubits</div>
-                    <div class="milestone" data-bits="50">50 qubits</div>
+                  <p>
+                    Processamento <strong>paralelo</strong>: todos os estados
+                    são verificados simultaneamente.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="explainer-card">
+              <div class="explainer-header">
+                <i class="fas fa-lightbulb"></i>
+                <h4>Por que isso importa?</h4>
+              </div>
+              <p>
+                A diferença entre computadores clássicos e quânticos não é
+                apenas de velocidade, mas de <strong>escala</strong>. Problemas
+                que seriam impossíveis de resolver em toda a vida do universo,
+                tornam-se viáveis em questão de minutos.
+              </p>
+              <div class="explainer-example">
+                <div class="example-title">Exemplo concreto:</div>
+                <p>Fatorar um número de 2048 bits (usado em criptografia):</p>
+                <div class="example-comparison">
+                  <div class="example-item">
+                    <strong>Supercomputador:</strong>
+                    <span class="time-result classical-time"
+                      >~2.3 x 10^19 anos</span
+                    >
+                  </div>
+                  <div class="example-item">
+                    <strong>Computador Quântico:</strong>
+                    <span class="time-result quantum-time"
+                      >~7088 dias (~19.5 anos)</span
+                    >
                   </div>
                 </div>
-                <div class="time-indicator">
-                  Tempo: <span id="quantum-time">0.00s</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="race-controls">
-              <button id="start-race" class="race-button">
-                <i class="fas fa-play"></i> Iniciar Simulação
-              </button>
-              <button id="reset-race" class="race-button">
-                <i class="fas fa-redo"></i> Reiniciar
-              </button>
-              <div class="bits-selector">
-                <label for="max-bits">Complexidade do problema:</label>
-                <select id="max-bits">
-                  <option value="30">30 bits/qubits - Médio</option>
-                  <option value="40">40 bits/qubits - Difícil</option>
-                  <option value="50" selected>50 bits/qubits - Extremo</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="race-results">
-              <div class="result-box">
-                <div class="result-title">Tempo Clássico</div>
-                <div id="classic-result" class="result-value">--</div>
-              </div>
-              <div class="result-box">
-                <div class="result-title">Tempo Quântico</div>
-                <div id="quantum-result" class="result-value">--</div>
-              </div>
-              <div class="result-box wide">
-                <div class="result-title">Ganho de Velocidade</div>
-                <div id="speedup-result" class="result-value">--</div>
               </div>
             </div>
           </div>
@@ -421,74 +470,6 @@
                 <div class="legend-color quantum-color"></div>
                 <span>Computação Quântica - tempo permanece gerenciável</span>
               </div>
-            </div>
-          </div>
-
-          <div class="scalability-table-container">
-            <h3>Comparação detalhada</h3>
-            <div class="table-container">
-              <table class="scalability-table">
-                <thead>
-                  <tr>
-                    <th>N° Bits/Qubits</th>
-                    <th>Estados possíveis</th>
-                    <th>Tempo Computador Clássico</th>
-                    <th>Tempo Computador Quântico</th>
-                    <th>Ganho Real</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>~instantâneo</td>
-                    <td>instantâneo</td>
-                    <td class="gain-none">Nenhum</td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>32</td>
-                    <td>~instantâneo</td>
-                    <td>instantâneo</td>
-                    <td class="gain-none">Nenhum</td>
-                  </tr>
-                  <tr>
-                    <td>15</td>
-                    <td>32.768</td>
-                    <td>~instantâneo</td>
-                    <td>instantâneo</td>
-                    <td class="gain-low">Baixo</td>
-                  </tr>
-                  <tr>
-                    <td>30</td>
-                    <td>1 bilhão</td>
-                    <td>~1 segundo</td>
-                    <td>instantâneo</td>
-                    <td class="gain-high">Alto</td>
-                  </tr>
-                  <tr>
-                    <td>45</td>
-                    <td>35 trilhões</td>
-                    <td>~10 horas</td>
-                    <td>segundos a minutos</td>
-                    <td class="gain-gigantic">Gigantesco</td>
-                  </tr>
-                  <tr>
-                    <td>60</td>
-                    <td>1 quintilhão</td>
-                    <td>~32 anos</td>
-                    <td>minutos</td>
-                    <td class="gain-astronomical">Astronômico</td>
-                  </tr>
-                  <tr>
-                    <td>100</td>
-                    <td>10³⁰</td>
-                    <td>maior que a idade do universo</td>
-                    <td>horas/dias</td>
-                    <td class="gain-incalculable">Incalculável</td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>
 

@@ -28,25 +28,61 @@ document.addEventListener("DOMContentLoaded", () => {
 // Mover as funções auxiliares para cálculos baseados na tabela fornecida para o escopo global
 // (apenas se ainda não estiverem no escopo global)
 function getClassicalTime(bits) {
-  if (bits <= 20) return "~instantâneo";
-  if (bits <= 25) return "~0,03 s";
-  if (bits <= 30) return "~1 s";
-  if (bits <= 35) return "~34 s";
-  if (bits <= 40) return "~17 min";
-  if (bits <= 45) return "~10 horas";
-  if (bits <= 50) return "~11 dias";
-  if (bits <= 55) return "~1 ano";
-  if (bits <= 60) return "~32 anos";
-  if (bits <= 70) return "~32.000 anos";
-  return "maior que a idade do universo";
+  // Tempo em microssegundos: 2^N x 1μs
+  const timeInMicroseconds = Math.pow(2, bits);
+  
+  // Converter para uma string legível
+  return formatTimeFromMicroseconds(timeInMicroseconds);
 }
 
 function getQuantumTime(bits) {
-  if (bits <= 44) return "instantâneo";
-  if (bits <= 54) return "segundos a minutos";
-  if (bits <= 60) return "minutos";
-  if (bits <= 70) return "minutos a horas";
-  return "horas/dias";
+  // Tempo em microssegundos: 2^(N/2) x 0,1μs
+  const timeInMicroseconds = Math.pow(2, bits/2) * 0.1;
+  
+  // Converter para uma string legível
+  return formatTimeFromMicroseconds(timeInMicroseconds);
+}
+
+// Nova função auxiliar para formatar o tempo baseado em microssegundos
+function formatTimeFromMicroseconds(microseconds) {
+  if (microseconds < 1000) {
+    return `${microseconds.toFixed(2)} μs`;
+  } else if (microseconds < 1000000) {
+    return `${(microseconds / 1000).toFixed(2)} ms`;
+  } else if (microseconds < 60000000) {
+    // Menos de 1 minuto em microssegundos
+    return `${(microseconds / 1000000).toFixed(2)} seg`;
+  } else if (microseconds < 3600000000) {
+    // Menos de 1 hora
+    const minutes = Math.floor(microseconds / 60000000);
+    const seconds = ((microseconds % 60000000) / 1000000).toFixed(0);
+    return `${minutes} min e ${seconds} seg`;
+  } else if (microseconds < 86400000000) {
+    // Menos de 1 dia
+    const hours = Math.floor(microseconds / 3600000000);
+    const minutes = Math.floor((microseconds % 3600000000) / 60000000);
+    return `${hours} hora${hours !== 1 ? 's' : ''}, ${minutes} min`;
+  } else if (microseconds < 31536000000000) {
+    // Menos de 1 ano
+    const days = Math.floor(microseconds / 86400000000);
+    return `${days} dia${days !== 1 ? 's' : ''}`;
+  } else if (microseconds < 31536000000000 * 1000) {
+    // Menos de 1000 anos
+    const years = Math.floor(microseconds / 31536000000000);
+    return `${years} ano${years !== 1 ? 's' : ''}`;
+  } else if (microseconds < 31536000000000 * 1000000) {
+    // Menos de 1 milhão de anos
+    const years = Math.floor(microseconds / 31536000000000);
+    return `${(years / 1000).toFixed(0)} mil anos`;
+  } else if (microseconds < 31536000000000 * 1000000000) {
+    const years = Math.floor(microseconds / 31536000000000);
+    return `${(years / 1000000).toFixed(0)} milhões de anos`;
+  } else if (microseconds < 31536000000000 * 1000000000000) {
+    const years = Math.floor(microseconds / 31536000000000);
+    return `${(years / 1000000000).toFixed(0)} bilhões de anos`;
+  } else {
+    return "maior que a idade do universo";
+  }
 }
 
 // Adicionar a função formatLargeNumber no escopo global, antes de qualquer outra função
@@ -953,25 +989,19 @@ function initStateCalculator() {
 
   // Funções auxiliares para cálculos baseados na tabela fornecida
   function getClassicalTime(bits) {
-    if (bits <= 20) return "~instantâneo";
-    if (bits <= 25) return "~0,03 s";
-    if (bits <= 30) return "~1 s";
-    if (bits <= 35) return "~34 s";
-    if (bits <= 40) return "~17 min";
-    if (bits <= 45) return "~10 horas";
-    if (bits <= 50) return "~11 dias";
-    if (bits <= 55) return "~1 ano";
-    if (bits <= 60) return "~32 anos";
-    if (bits <= 70) return "~32.000 anos";
-    return "maior que a idade do universo";
+    // Tempo em microssegundos: 2^N x 1μs
+    const timeInMicroseconds = Math.pow(2, bits);
+    
+    // Converter para uma string legível
+    return formatTimeFromMicroseconds(timeInMicroseconds);
   }
 
   function getQuantumTime(bits) {
-    if (bits <= 44) return "instantâneo";
-    if (bits <= 54) return "segundos a minutos";
-    if (bits <= 60) return "minutos";
-    if (bits <= 70) return "minutos a horas";
-    return "horas/dias";
+    // Tempo em microssegundos: 2^(N/2) x 0,1μs
+    const timeInMicroseconds = Math.pow(2, bits/2) * 0.1;
+    
+    // Converter para uma string legível
+    return formatTimeFromMicroseconds(timeInMicroseconds);
   }
 
   function getGainDescription(bits) {
@@ -1699,4 +1729,164 @@ processingStyles.textContent = `
   }
 `;
 document.head.appendChild(processingStyles);
+
+// Função para inicializar a nova visualização de tempo de processamento no slide 4
+function initTimeVisualization() {
+  const complexitySlider = document.getElementById('complexity-slider');
+  const bitsValue = document.getElementById('bits-value');
+  const classicalTime = document.getElementById('classical-time');
+  const quantumTime = document.getElementById('quantum-time');
+  const scaleFactor = document.getElementById('scale-factor');
+  
+  // Anéis para visualização do tempo de processamento
+  const classicalRings = document.querySelectorAll('.classical-rings .ring');
+  const quantumRings = document.querySelectorAll('.quantum-rings .ring');
+  
+  if (!complexitySlider || !classicalTime || !quantumTime) {
+    console.error('Elementos da visualização de tempo não encontrados');
+    return;
+  }
+
+  // Função para atualizar a visualização baseada na complexidade
+  function updateVisualization() {
+    const bits = parseInt(complexitySlider.value);
+    bitsValue.textContent = bits;
+    
+    // Calcular tempos usando as fórmulas padronizadas
+    // Clássico: 2^N × 1μs
+    const classicalTimeInMicroseconds = Math.pow(2, bits);
+    // Quântico: 2^(N/2) × 0,1μs
+    const quantumTimeInMicroseconds = Math.pow(2, bits/2) * 0.1;
+    
+    // Calcular o fator de aceleração
+    const speedupFactor = classicalTimeInMicroseconds / Math.max(0.1, quantumTimeInMicroseconds);
+    
+    // Adicionar classe de atualização para animar a mudança
+    classicalTime.classList.add('updating');
+    quantumTime.classList.add('updating');
+    scaleFactor.classList.add('updating');
+    
+    // Atualizar os valores exibidos usando a função padronizada de formatação
+    classicalTime.textContent = formatTimeFromMicroseconds(classicalTimeInMicroseconds);
+    quantumTime.textContent = formatTimeFromMicroseconds(quantumTimeInMicroseconds);
+    
+    // Formatar o fator de aceleração
+    let speedupText;
+    if (speedupFactor < 1000) speedupText = `${speedupFactor.toFixed(0)}`;
+    else if (speedupFactor < 1000000) speedupText = `${(speedupFactor / 1000).toFixed(1)} mil`;
+    else if (speedupFactor < 1000000000) speedupText = `${(speedupFactor / 1000000).toFixed(1)} milhões`;
+    else if (speedupFactor < 1000000000000) speedupText = `${(speedupFactor / 1000000000).toFixed(1)} bilhões`;
+    else if (speedupFactor < 1000000000000000) speedupText = `${(speedupFactor / 1000000000000).toFixed(1)} trilhões`;
+    else speedupText = "inimaginável";
+    
+    scaleFactor.textContent = `x${speedupText}`;
+    
+    // Remover classe de atualização após a animação
+    setTimeout(() => {
+      classicalTime.classList.remove('updating');
+      quantumTime.classList.remove('updating');
+      scaleFactor.classList.remove('updating');
+    }, 500);
+    
+    // Atualizar os anéis visíveis baseados na complexidade
+    updateRings(classicalRings, bits, 10);
+    updateRings(quantumRings, bits, 20);
+  }
+  
+  // Função para atualizar os anéis de tempo
+  function updateRings(rings, bits, threshold) {
+    const isClassical = rings[0].closest('.classical-rings') !== null;
+    
+    // Lógica diferente para cada tipo de visualização
+    if (isClassical) {
+      // Para computação clássica, os anéis crescem rapidamente com a complexidade
+      rings.forEach((ring, index) => {
+        // Determinar se o anel deve estar ativo baseado na complexidade
+        const shouldBeActive = bits >= threshold + (index * 7);
+        
+        // Escalonar o anel baseado na complexidade (efeito visual)
+        const scale = shouldBeActive ? 1 + ((bits - threshold) / 50) * (index / rings.length) : 1;
+        
+        // Aplicar as alterações
+        ring.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        ring.style.opacity = shouldBeActive ? 1 : 0;
+        
+        // Adicionar/remover classe de animação
+        if (shouldBeActive) ring.classList.add('active');
+        else ring.classList.remove('active');
+      });
+    } else {
+      // Para computação quântica, os anéis crescem muito mais lentamente
+      rings.forEach((ring, index) => {
+        // Determinar se o anel deve estar ativo baseado na complexidade
+        const shouldBeActive = bits >= threshold + (index * 20);
+        
+        // Escalonar o anel baseado na complexidade (efeito visual)
+        const scale = shouldBeActive ? 1 + ((bits - threshold) / 100) * (index / rings.length) : 1;
+        
+        // Aplicar as alterações
+        ring.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        ring.style.opacity = shouldBeActive ? 1 : 0;
+        
+        // Adicionar/remover classe de animação
+        if (shouldBeActive) ring.classList.add('active');
+        else ring.classList.remove('active');
+      });
+    }
+  }
+
+  // Adicionar evento ao slider
+  complexitySlider.addEventListener('input', updateVisualization);
+  
+  // Inicializar visualização
+  updateVisualization();
+  
+  // Adicionar animação inicial para chamar a atenção
+  setTimeout(() => {
+    // Simular movimento do slider para demonstração
+    const animate = (value, duration) => {
+      const start = parseInt(complexitySlider.value);
+      const diff = value - start;
+      const startTime = performance.now();
+      
+      function step(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        if (elapsedTime < duration) {
+          const progress = elapsedTime / duration;
+                   const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease in-out
+          complexitySlider.value = start + diff * easeProgress;
+          updateVisualization();
+          requestAnimationFrame(step);
+        } else {
+          complexitySlider.value = value;
+          updateVisualization();
+        }
+      }
+      
+      requestAnimationFrame(step);
+    };
+    
+    // Animação sequencial para demonstrar o efeito
+    animate(20, 1000); // Começar pequeno
+    setTimeout(() => animate(45, 2000), 1500); // Crescer bastante
+    setTimeout(() => animate(70, 1500), 4000); // Crescer mais
+    setTimeout(() => animate(100, 2000), 6000); // Mostrar caso extremo
+    setTimeout(() => animate(30, 2000), 9000); // Voltar ao valor inicial
+  }, 1000);
 }
+
+// Adicionar inicialização da visualização de tempo quando o slide 4 é ativado
+document.querySelectorAll(".slide").forEach((slide) => {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === "class" && slide.classList.contains("active")) {
+        if (slide.id === "slide4") {
+          console.log("Slide 4 ativado, inicializando visualização de tempo");
+          initTimeVisualization();
+        }
+      }
+    });
+  });
+
+  observer.observe(slide, { attributes: true });
+}); }
