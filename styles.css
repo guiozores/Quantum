@@ -525,6 +525,31 @@ ul li {
   line-height: 1.6;
 }
 
+/* Estilo para links de referências */
+.reference-link,
+.highlight-link {
+  color: #64b5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.9em;
+}
+
+.reference-link:hover,
+.highlight-link:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.highlight-link {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+/* Ajuste para referência bibliográfica no último slide */
+.reference-list li {
+  margin-bottom: 20px;
+}
+
 /* Bits vs Qubits Slide */
 .bits-qubits-container {
   display: flex;
@@ -3116,4 +3141,34 @@ ul li {
     font-size: 12px;
     padding: 5px;
   }
+}
+
+/* Estilo para as referências no rodapé dos slides */
+.slide-references {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  font-size: 0.75em;
+  color: var(--text-secondary);
+  font-style: italic;
+  max-width: 70%;
+}
+
+.slide-references p {
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Ajuste da posição do número do slide para evitar sobreposição com as referências */
+.slide-number {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+/* Ajustar espaçamento no fundo do content para acomodar as referências */
+.content {
+  padding-bottom: 45px;
 }
