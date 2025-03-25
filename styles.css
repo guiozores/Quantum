@@ -345,30 +345,48 @@ ul li {
   position: absolute;
   height: 100%;
   border-radius: 6px;
-  transition: width 1.5s ease;
+  transition: width 3s ease; /* Aumentado de 1.5s para 3s */
 }
 
 .bar.classic::before {
   background-color: #ff7675;
   width: 0;
-  animation: fillBar 1.5s forwards;
+  animation: fillBar 3s forwards ease-in-out; /* Aumentado de 1.5s para 3s e adicionado ease-in-out */
   animation-delay: 0.5s;
 }
 
 .bar.quantum::before {
   background-color: var(--accent-color);
   width: 0;
-  animation: fillBarQuantum 1.5s forwards;
+  animation: fillBarQuantum 3s forwards ease-in-out; /* Aumentado de 1.5s para 3s e adicionado ease-in-out */
   animation-delay: 0.5s;
 }
 
 @keyframes fillBar {
+  0% {
+    width: 0%;
+  }
+  30% {
+    width: 30%; /* Ponto intermediário para desacelerar */
+  }
+  70% {
+    width: 70%; /* Outro ponto intermediário */
+  }
   to {
     width: 90%;
   }
 }
 
 @keyframes fillBarQuantum {
+  0% {
+    width: 0%;
+  }
+  30% {
+    width: 3%; /* Ponto intermediário para desacelerar */
+  }
+  70% {
+    width: 7%; /* Outro ponto intermediário */
+  }
   to {
     width: 10%;
   }
@@ -576,7 +594,9 @@ ul li {
   border-radius: 50%;
   position: relative;
   transform-style: preserve-3d;
-  animation: rotateSlow 30s infinite linear; /* Mais lento para melhor visualização */
+  /* Remover animação e adicionar transformação fixa para visão isométrica */
+  animation: none;
+  transform: rotateX(15deg) rotateY(-15deg); /* Leve inclinação para dar perspectiva 3D */
   background: radial-gradient(
     circle at 30% 30%,
     rgba(100, 255, 218, 0.9),
@@ -1507,6 +1527,190 @@ ul li {
   font-weight: bold;
 }
 
+/* Visualização de qubit - Esfera de Bloch sem rotação */
+.qubit-sphere {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* Remover animação e adicionar transformação fixa para visão isométrica */
+  animation: none;
+  transform: rotateX(15deg) rotateY(-15deg); /* Leve inclinação para dar perspectiva 3D */
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(100, 255, 218, 0.9),
+    rgba(0, 0, 255, 0.7),
+    rgba(128, 0, 128, 0.7)
+  );
+  box-shadow: 0 0 30px rgba(100, 255, 218, 0.5);
+  overflow: visible;
+}
+
+/* Estilo para o texto sobre superposição */
+.superposition-highlight {
+  color: var(--accent-color);
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+}
+
+/* Estilos para os novos gráficos comparativos */
+.graphs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.graph-row {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.graph-column {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.graph-title {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: white;
+}
+
+.graph-container {
+  width: 100%;
+  height: 250px;
+  position: relative;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.graph-axis {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.x-axis {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+.y-axis {
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+}
+
+.graph-label {
+  position: absolute;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.x-label {
+  bottom: -20px;
+  right: 0;
+}
+
+.y-label {
+  top: -20px;
+  left: 10px;
+}
+
+/* Linhas dos gráficos */
+.graph-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.classical-line {
+  stroke: #3498db;
+  stroke-width: 2;
+  fill: none;
+}
+
+.quantum-line {
+  stroke: var(--accent-color);
+  stroke-width: 2;
+  fill: none;
+}
+
+.quantum-area {
+  fill: rgba(100, 255, 218, 0.1);
+  stroke: none;
+}
+
+.graph-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+}
+
+.classical-color {
+  background-color: #3498db;
+}
+
+.quantum-color {
+  background-color: var(--accent-color);
+}
+
+.superposition-color {
+  background: linear-gradient(to right, #3498db, var(--accent-color));
+}
+
+.conclusion-box {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-left: 4px solid var(--accent-color);
+  padding: 15px;
+  margin-top: 30px;
+  border-radius: 4px;
+}
+
+.conclusion-title {
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .graph-row {
+    flex-direction: column;
+  }
+
+  .graph-container {
+    height: 200px;
+  }
+}
+
 /* Responsividade */
 @media (max-width: 900px) {
   .two-columns,
@@ -1710,5 +1914,719 @@ ul li {
     margin-left: 0;
     margin-top: 20px;
     max-width: 100%;
+  }
+}
+
+/* Visualização de qubit - Esfera de Bloch com rotação e interatividade */
+.qubit-sphere {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* Remover animação definida aqui, será controlada via JavaScript */
+  animation: none;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(100, 255, 218, 0.9),
+    rgba(0, 0, 255, 0.7),
+    rgba(128, 0, 128, 0.7)
+  );
+  box-shadow: 0 0 30px rgba(100, 255, 218, 0.5);
+  overflow: visible;
+  cursor: grab;
+  transition: transform 0.1s linear;
+}
+
+.qubit-sphere:active {
+  cursor: grabbing;
+}
+
+/* Estilo para o botão de controle do qubit */
+.qubit-control-btn {
+  font-size: 12px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.qubit-control-btn:hover {
+  background-color: rgba(100, 255, 218, 0.3);
+}
+
+/* Estilo para a descrição de equivalência */
+.equivalence-row {
+  background-color: rgba(100, 255, 218, 0.05) !important;
+}
+
+.equivalence-description {
+  font-size: 0.9em;
+  color: var(--accent-color);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Estilo para valores que merecem destaque na tabela */
+.highlight-value {
+  color: #ff9f43;
+  font-weight: bold;
+}
+
+/* Estilo para a nova linha de cabeçalho da equivalência */
+.equivalence-header {
+  background-color: rgba(100, 255, 218, 0.1) !important;
+  font-weight: bold;
+  text-align: left !important;
+  color: var(--accent-color);
+}
+
+/* Estilo para os eixos corrigidos do qubit */
+.qubit-axis {
+  position: absolute;
+  transform-origin: center;
+  z-index: 5;
+}
+
+.x-axis .axis-label {
+  position: absolute;
+  right: -15px;
+  top: -15px;
+  color: rgba(255, 100, 100, 0.9);
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.y-axis .axis-label {
+  position: absolute;
+  top: -15px;
+  left: 5px;
+  color: rgba(100, 255, 100, 0.9);
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.z-axis .axis-label {
+  position: absolute;
+  bottom: 5px;
+  left: -15px;
+  color: rgba(100, 100, 255, 0.9);
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para os gráficos interativos */
+.graph-container {
+  position: relative;
+  cursor: pointer;
+  height: 250px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  overflow: visible; /* Permitir que tooltips fiquem visíveis fora do container */
+}
+
+.graph-point {
+  position: absolute;
+  width: 14px; /* Aumentado para melhor visibilidade */
+  height: 14px; /* Aumentado para melhor visibilidade */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  opacity: 0;
+  display: none; /* Começa oculto */
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.classical-point {
+  background: radial-gradient(circle at center, #fff, #3498db);
+  box-shadow: 0 0 10px 2px rgba(52, 152, 219, 0.8);
+}
+
+.quantum-point {
+  background: radial-gradient(circle at center, #fff, var(--accent-color));
+  box-shadow: 0 0 10px 2px rgba(100, 255, 218, 0.8);
+}
+
+.graph-tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.95);
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  z-index: 20;
+  opacity: 0;
+  display: none;
+  transition: opacity 0.2s ease;
+  margin-top: -20px;
+  min-width: 170px;
+  max-width: 220px;
+  text-align: center;
+}
+
+.graph-tooltip sup {
+  font-size: 9px; /* Tamanho menor para exponentes */
+  line-height: 0;
+  position: relative;
+  vertical-align: super;
+  top: -2px;
+}
+
+/* Linhas dos gráficos */
+.graph-line {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.classical-line,
+.quantum-line {
+  stroke-width: 3px; /* Mesma espessura para ambas as linhas */
+  fill: none;
+}
+
+.classical-line {
+  stroke: #3498db;
+}
+
+.quantum-line {
+  stroke: var(--accent-color);
+}
+
+.quantum-area {
+  opacity: 0.15;
+  fill: rgba(100, 255, 218, 0.2);
+}
+
+.comparison-tip {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+  font-style: italic;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+  font-size: 0.95em;
+}
+
+.comparison-tip strong {
+  color: #fff;
+}
+
+/* Ajustes para garantir que os tooltips sejam visíveis em dispositivos móveis */
+@media (max-width: 768px) {
+  .graph-tooltip {
+    font-size: 11px;
+    min-width: 120px;
+    padding: 6px 10px;
+  }
+
+  .graph-point {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Melhorar exibição de exponentes nas tabelas de resultados */
+.results-table sup {
+  font-size: 0.7em;
+  line-height: 0;
+  position: relative;
+  vertical-align: super;
+  top: -2px;
+}
+
+/* Adicionar estilos para enfatizar a diferença de processamento */
+.result-info {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+#bit-states-info {
+  color: #3498db;
+}
+
+#qubit-states-info {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Remover a formatação especial para processamento sequencial - cor padrão */
+.sequential-processing {
+  color: inherit; /* Usar a cor padrão do texto pai */
+  font-weight: normal; /* Remover negrito */
+}
+
+/* Manter a formatação especial apenas para processamento simultâneo */
+.simultaneous-processing {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Nova visualização de comparação de tempo para o slide 4 */
+.time-comparison {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 30px 0;
+  border: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+.time-comparison h3 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--accent-color);
+}
+
+.time-comparison-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.time-comparison-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.time-bit-count {
+  width: 120px;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: white;
+}
+
+.time-comparison-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.time-classical,
+.time-quantum {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-label {
+  width: 80px;
+  text-align: right;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+.time-progress-container {
+  flex: 1;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.time-progress {
+  height: 100%;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 15px;
+  width: 0; /* Início em 0 para animação */
+  transition: width 1.5s ease-out;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.time-progress.classical {
+  background: linear-gradient(90deg, #2980b9, #ff7675);
+}
+
+.time-progress.quantum {
+  background: linear-gradient(90deg, #00b09b, var(--accent-color));
+}
+
+.time-value {
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.time-icons {
+  width: 80px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.5em;
+}
+
+.time-icons i {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.time-icons i:first-child {
+  color: #ff7675;
+}
+
+.time-icons i:last-child {
+  color: var(--accent-color);
+}
+
+.time-icons i:hover {
+  transform: scale(1.2);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.time-comparison-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+}
+
+.classical-color {
+  background: linear-gradient(90deg, #2980b9, #ff7675);
+}
+
+.quantum-color {
+  background: linear-gradient(90deg, #00b09b, var(--accent-color));
+}
+
+/* Adaptação para telas menores */
+@media (max-width: 768px) {
+  .time-comparison-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .time-bit-count {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 8px;
+  }
+
+  .time-icons {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 5px;
+  }
+
+  .time-label {
+    width: 70px;
+    font-size: 0.8em;
+  }
+}
+
+/* Estilos para a nova visualização de corrida de tempo */
+.time-race-container {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0 30px;
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  overflow: hidden;
+}
+
+.time-race-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.time-race-header h3 {
+  color: var(--accent-color);
+  margin-bottom: 5px;
+  font-size: 1.4em;
+}
+
+.race-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+.race-track {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 60px;
+  position: relative;
+}
+
+.racer-label {
+  width: 80px;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.race-track.classical .racer-label {
+  color: #ff7675;
+}
+
+.race-track.quantum .racer-label {
+  color: var(--accent-color);
+}
+
+.racer-container {
+  flex: 1;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-path {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10%;
+  align-items: center;
+  pointer-events: none;
+}
+
+.milestone {
+  width: 2px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 5;
+}
+
+.milestone::after {
+  content: attr(data-bits);
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.racer {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  left: 0;
+  top: 0;
+  transform: translateX(-50%);
+  transition: left 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 10;
+}
+
+.classic-racer {
+  background: linear-gradient(135deg, #ff9a9e, #ff7675);
+  box-shadow: 0 0 15px rgba(255, 118, 117, 0.7);
+}
+
+.quantum-racer {
+  background: linear-gradient(135deg, #81ffef, var(--accent-color));
+  box-shadow: 0 0 15px rgba(100, 255, 218, 0.7);
+}
+
+.time-indicator {
+  width: 120px;
+  text-align: left;
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.race-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.race-button {
+  background-color: rgba(100, 255, 218, 0.2);
+  color: var(--text-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.race-button:hover {
+  background-color: rgba(100, 255, 218, 0.3);
+  transform: translateY(-2px);
+}
+
+.race-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+
+.bits-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bits-selector select {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--accent-color);
+  color: white;
+  padding: 7px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.race-results {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.result-box {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 10px 15px;
+  width: 150px;
+  text-align: center;
+}
+
+.result-box.wide {
+  width: 220px;
+}
+
+.result-title {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.result-value {
+  font-size: 1.2em;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+#classic-result {
+  color: #ff7675;
+}
+
+#quantum-result {
+  color: var(--accent-color);
+}
+
+#speedup-result {
+  color: #ffeaa7;
+}
+
+/* Efeitos de brilho para os competidores */
+@keyframes classicGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(255, 118, 117, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 118, 117, 0.9);
+  }
+}
+
+@keyframes quantumGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(100, 255, 218, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(100, 255, 218, 0.9);
+  }
+}
+
+.classic-racer.racing {
+  animation: classicGlow 1s infinite;
+}
+
+.quantum-racer.racing {
+  animation: quantumGlow 1s infinite;
+}
+
+/* Adaptação para telas menores */
+@media (max-width: 768px) {
+  .race-track {
+    flex-direction: column;
+    height: auto;
+    gap: 5px;
+  }
+
+  .racer-label {
+    width: 100%;
+    text-align: left;
+  }
+
+  .time-indicator {
+    width: 100%;
+    text-align: left;
+    margin-top: 5px;
+  }
+
+  .race-results {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .result-box,
+  .result-box.wide {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .bits-selector {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
   }
 }

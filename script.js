@@ -25,6 +25,69 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Mover as funções auxiliares para cálculos baseados na tabela fornecida para o escopo global
+// (apenas se ainda não estiverem no escopo global)
+function getClassicalTime(bits) {
+  if (bits <= 20) return "~instantâneo";
+  if (bits <= 25) return "~0,03 s";
+  if (bits <= 30) return "~1 s";
+  if (bits <= 35) return "~34 s";
+  if (bits <= 40) return "~17 min";
+  if (bits <= 45) return "~10 horas";
+  if (bits <= 50) return "~11 dias";
+  if (bits <= 55) return "~1 ano";
+  if (bits <= 60) return "~32 anos";
+  if (bits <= 70) return "~32.000 anos";
+  return "maior que a idade do universo";
+}
+
+function getQuantumTime(bits) {
+  if (bits <= 44) return "instantâneo";
+  if (bits <= 54) return "segundos a minutos";
+  if (bits <= 60) return "minutos";
+  if (bits <= 70) return "minutos a horas";
+  return "horas/dias";
+}
+
+// Adicionar a função formatLargeNumber no escopo global, antes de qualquer outra função
+// Mova esse código para o início do arquivo, logo após as declarações iniciais
+function formatLargeNumber(num) {
+  if (num < 1000) return num.toString();
+  if (num < 1e6) return `${(num / 1e3).toFixed(1)} mil`;
+  if (num < 1e9) return `${(num / 1e6).toFixed(1)} milhões`;
+  if (num < 1e12) return `${(num / 1e9).toFixed(1)} bilhões`;
+  if (num < 1e15) return `${(num / 1e12).toFixed(1)} trilhões`;
+  if (num < 1e18) return `${(num / 1e15).toFixed(1)} quadrilhões`;
+  if (num < 1e21) return `${(num / 1e18).toFixed(1)} quintilhões`;
+  if (num < 1e24) return `${(num / 1e21).toFixed(1)} sextilhões`;
+  return `${num.toExponential(2)}`;
+}
+
+// Função para obter a descrição da equivalência
+function getEquivalenceDescription(bits) {
+  if (bits <= 2) return "Sem vantagem significativa";
+  if (bits <= 5)
+    return `${bits} qubits = 2<sup>${bits}</sup> bits processados simultaneamente`;
+  if (bits <= 10)
+    return `${bits} qubits processam ${formatLargeNumber(
+      Math.pow(2, bits)
+    )} estados simultaneamente`;
+  if (bits <= 20)
+    return `${bits} qubits ≈ ${formatLargeNumber(
+      Math.pow(2, bits)
+    )} bits (1 milhão de estados)`;
+  if (bits <= 30)
+    return `${bits} qubits ≈ ${formatLargeNumber(
+      Math.pow(2, bits)
+    )} bits (1 bilhão de estados)`;
+  if (bits <= 40) return `${bits} qubits ≈ 1 trilhão de estados simultâneos`;
+  if (bits <= 50)
+    return `${bits} qubits ≈ 1 quadrilhão de estados (impossível em bits)`;
+  if (bits <= 100)
+    return `${bits} qubits ≈ 10<sup>30</sup> estados (mais que estrelas no universo)`;
+  return `${bits} qubits = poder de processamento <strong>incompreensível</strong> com bits`;
+}
+
 // Inicializar a Esfera de Bloch 3D Wireframe
 function initBlochSphere() {
   const superpositionParticles = document.querySelector(
@@ -150,7 +213,7 @@ function initBlochSphere() {
   }
 
   // Estado para controle da animação do ponto qubit
-  let isAnimating = false; // Começar pausado
+  let isAnimating = true; // Alterado de false para true - começar com animação
   let animationInterval;
   let manualPosition = 0.0; // Valor inicial no topo (|0⟩)
   let manualTheta = 0; // Ângulo theta na esfera de Bloch (vertical)
@@ -158,9 +221,9 @@ function initBlochSphere() {
 
   // Configurar o controle de pausa/reprodução
   if (pauseAnimationBtn && playAnimationBtn) {
-    // Iniciar com o botão de play visível
-    pauseAnimationBtn.style.display = "none";
-    playAnimationBtn.style.display = "inline-flex";
+    // Iniciar com o botão de pausa visível (ativo)
+    pauseAnimationBtn.style.display = "inline-flex";
+    playAnimationBtn.style.display = "none";
 
     pauseAnimationBtn.addEventListener("click", () => {
       isAnimating = false;
@@ -280,7 +343,7 @@ function initBlochSphere() {
     // Posicionar o qubit inicialmente no topo (|0⟩)
     updateQubitPosition(manualTheta, manualPhi);
 
-    // Iniciar animação se estiver ativada
+    // Iniciar animação já que agora isAnimating começa como true
     if (isAnimating) {
       startQubitAnimation();
     }
@@ -361,56 +424,56 @@ function initBlochSphere() {
 // Adicionar CSS para as partículas da esfera de Bloch
 const style = document.createElement("style");
 style.textContent = `
-  .bloch-particle {
-    position: absolute;
-    border-radius: 50%;
-    background-color: var(--accent-color);
-    box-shadow: 0 0 5px var(--accent-color);
-    transform-style: preserve-3d;
-    pointer-events: none;
-  }
-  
-  .single-qubit-point {
-    position: absolute;
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: 0 0 10px var(--accent-color), 0 0 20px rgba(255, 255, 255, 0.5);
-    transform-style: preserve-3d;
-    width: 10px;
-    height: 10px;
-    margin-left: -5px;
-    margin-top: -5px;
-    z-index: 10;
-  }
-  
-  .qubit-value-indicator {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: var(--accent-color);
-    font-size: 12px;
-    font-weight: bold;
-    padding: 3px 6px;
-    border-radius: 4px;
-    z-index: 20;
-    white-space: nowrap;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  }
-  
-  @keyframes particleFloat {
-    0%, 100% {
-      transform: translateZ(0) scale(1);
-      opacity: 0.3;
+    .bloch-particle {
+      position: absolute;
+      border-radius: 50%;
+      background-color: var(--accent-color);
+      box-shadow: 0 0 5px var(--accent-color);
+      transform-style: preserve-3d;
+      pointer-events: none;
     }
-    50% {
-      transform: translateZ(20px) scale(1.5);
-      opacity: 0.8;
+    
+    .single-qubit-point {
+      position: absolute;
+      border-radius: 50%;
+      background-color: white;
+      box-shadow: 0 0 10px var(--accent-color), 0 0 20px rgba(255, 255, 255, 0.5);
+      transform-style: preserve-3d;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      margin-top: -5px;
+      z-index: 10;
     }
-  }
-`;
+    
+    .qubit-value-indicator {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: var(--accent-color);
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 6px;
+      border-radius: 4px;
+      z-index: 20;
+      white-space: nowrap;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    @keyframes particleFloat {
+      0%, 100% {
+        transform: translateZ(0) scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateZ(20px) scale(1.5);
+        opacity: 0.8;
+      }
+    }
+  `;
 document.head.appendChild(style);
 
 let currentSlide = 1;
-const totalSlides = 10; // Atualizado para 10 slides devido ao novo slide de tabela
+const totalSlides = 11; // Atualizado para 10 slides devido ao novo slide de tabela
 
 function initSlides() {
   // Atualizar barra de progresso
@@ -447,15 +510,53 @@ function prevSlide() {
 }
 
 function changeSlide(newSlide) {
-  // Ocultar slide atual
-  document.getElementById(`slide${currentSlide}`).classList.remove("active");
+  console.log(`Tentando mudar para o slide ${newSlide}`);
 
-  // Mostrar novo slide
+  // Tentar encontrar o slide atual e remover a classe active
+  const currentSlideElement = document.getElementById(`slide${currentSlide}`);
+  if (!currentSlideElement) {
+    console.error(`Slide atual (${currentSlide}) não encontrado no DOM.`);
+  } else {
+    currentSlideElement.classList.remove("active");
+  }
+
+  // Atualizar slide atual
   currentSlide = newSlide;
-  document.getElementById(`slide${currentSlide}`).classList.add("active");
 
-  // Atualizar barra de progresso
+  // Tentar encontrar o novo slide
+  const nextSlideElement = document.getElementById(`slide${currentSlide}`);
+  if (!nextSlideElement) {
+    console.error(`Novo slide (${currentSlide}) não encontrado no DOM.`);
+    // Tentar recuperar para o primeiro slide
+    currentSlide = 1;
+    const firstSlide = document.getElementById("slide1");
+    if (firstSlide) firstSlide.classList.add("active");
+  } else {
+    nextSlideElement.classList.add("active");
+  }
+
+  // Atualizar a barra de progresso
   updateProgressBar();
+
+  // Se for slide 4, reiniciar as animações das barras com velocidade reduzida
+  if (newSlide === 4) {
+    // Selecionamos as barras e removemos qualquer animação anterior
+    const bars = document.querySelectorAll(".bar");
+    bars.forEach((bar) => {
+      bar.style.animation = "none";
+      // Forçar reflow para reiniciar a animação
+      void bar.offsetWidth;
+
+      // Aplicar animações mais lentas
+      setTimeout(() => {
+        if (bar.classList.contains("classic")) {
+          bar.style.animation = "fillBar 3s forwards ease-in-out"; // 3s em vez de 1.5s
+        } else if (bar.classList.contains("quantum")) {
+          bar.style.animation = "fillBarQuantum 3s forwards ease-in-out"; // 3s em vez de 1.5s
+        }
+      }, 10);
+    });
+  }
 }
 
 function initSwipeDetection() {
@@ -531,6 +632,8 @@ document.querySelectorAll(".slide").forEach((slide) => {
               }
             }, 10);
           });
+        } else if (slideId === "slide5") {
+          initComparisonGraphs();
         }
       }
     });
@@ -560,19 +663,28 @@ function initBitsQubits() {
     });
   }, 1000);
 
-  // Animação do qubit na esfera de Bloch
+  // Animação do qubit na esfera de Bloch - com rotação e interatividade
   let qubitState = document.getElementById("qubitState");
   let qubitValueBox = null;
+  let qubitSphere = document.getElementById("qubitSphere");
+
+  // Inicializar variáveis para controle de interatividade
+  let isDraggingSphere = false;
+  let rotationPaused = false;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+  let rotateX = 15;
+  let rotateY = -15;
+  let rotationInterval;
 
   // Adicionar um indicador de valor ao qubit
   if (qubitState && !document.querySelector(".qubit-value-box")) {
     qubitValueBox = document.createElement("div");
     qubitValueBox.className = "qubit-value-box";
-    document.getElementById("qubitSphere").appendChild(qubitValueBox);
+    qubitSphere.appendChild(qubitValueBox);
   }
 
   // Remover elementos antigos e adicionar meridianos corretamente centralizados
-  const qubitSphere = document.getElementById("qubitSphere");
   if (qubitSphere) {
     // Remover meridianos existentes
     qubitSphere
@@ -581,13 +693,99 @@ function initBitsQubits() {
 
     // Adicionar meridianos corretamente posicionados
     const meridians = `
-      <div class="qubit-meridian" style="transform: translateX(-50%)"></div>
-      <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(45deg)"></div>
-      <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(90deg)"></div>
-      <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(135deg)"></div>
-      <div class="qubit-equator"></div>
-    `;
+        <div class="qubit-meridian" style="transform: translateX(-50%)"></div>
+        <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(45deg)"></div>
+        <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(90deg)"></div>
+        <div class="qubit-meridian" style="transform: translateX(-50%) rotateY(135deg)"></div>
+        <div class="qubit-equator"></div>
+      `;
     qubitSphere.insertAdjacentHTML("beforeend", meridians);
+
+    // Iniciar a rotação automática
+    startSphereRotation();
+
+    // Adicionar eventos para interatividade
+    qubitSphere.addEventListener("mousedown", (e) => {
+      isDraggingSphere = true;
+      rotationPaused = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      clearInterval(rotationInterval);
+      e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDraggingSphere) return;
+
+      const deltaX = e.clientX - lastMouseX;
+      const deltaY = e.clientY - lastMouseY;
+
+      rotateX += deltaY * 0.5;
+      rotateY += deltaX * 0.5;
+
+      // Limitar a rotação no eixo X
+      rotateX = Math.min(80, Math.max(-80, rotateX));
+
+      qubitSphere.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDraggingSphere) {
+        isDraggingSphere = false;
+
+        // Reiniciar rotação automática após 3 segundos se não estiver em pausa
+        setTimeout(() => {
+          if (!rotationPaused) {
+            startSphereRotation();
+          }
+        }, 3000);
+      }
+    });
+
+    // Função para iniciar a rotação da esfera
+    function startSphereRotation() {
+      clearInterval(rotationInterval);
+
+      rotationInterval = setInterval(() => {
+        rotateY += 0.2;
+        if (rotateY >= 360) rotateY -= 360;
+        qubitSphere.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      }, 30);
+    }
+
+    // Botão para pausar/retomar a rotação (opcional)
+    const pauseButton = document.createElement("button");
+    pauseButton.className = "qubit-control-btn";
+    pauseButton.innerHTML = "⏸";
+    pauseButton.title = "Pausar/Retomar rotação";
+    pauseButton.style.position = "absolute";
+    pauseButton.style.top = "0";
+    pauseButton.style.right = "0";
+    pauseButton.style.zIndex = "10";
+    pauseButton.style.background = "rgba(0,0,0,0.5)";
+    pauseButton.style.border = "none";
+    pauseButton.style.color = "white";
+    pauseButton.style.padding = "3px 5px";
+    pauseButton.style.cursor = "pointer";
+
+    pauseButton.addEventListener("click", () => {
+      rotationPaused = !rotationPaused;
+      pauseButton.innerHTML = rotationPaused ? "▶" : "⏸";
+
+      if (rotationPaused) {
+        clearInterval(rotationInterval);
+      } else {
+        startSphereRotation();
+      }
+    });
+
+    qubitSphere.appendChild(pauseButton);
+
+    // Chamar a função para corrigir os eixos
+    fixQubitAxes();
   }
 
   // Animação controlada para garantir que toque em 0 e 1
@@ -643,6 +841,7 @@ function initBitsQubits() {
           if (!slide.classList.contains("active") && slide.id === "slide3") {
             clearInterval(bitInterval);
             clearInterval(qubitInterval);
+            clearInterval(rotationInterval);
           } else if (
             slide.classList.contains("active") &&
             slide.id === "slide3"
@@ -669,6 +868,7 @@ function initStateCalculator() {
   const timeClassical = document.getElementById("time-classical");
   const timeQuantum = document.getElementById("time-quantum");
   const gainResult = document.getElementById("gain-result");
+  const equivalenceResult = document.getElementById("qubit-equivalence");
 
   // Verificar se os elementos existem
   if (!bitInput) {
@@ -681,19 +881,7 @@ function initStateCalculator() {
     return;
   }
 
-  // Verificar se os elementos de resultado existem
-  if (
-    !bitResult ||
-    !qubitResult ||
-    !timeClassical ||
-    !timeQuantum ||
-    !gainResult
-  ) {
-    console.error("Elementos de resultado não encontrados");
-    return;
-  }
-
-  // Função para calcular e exibir os resultados
+  // Função para calcular e exibir os resultados - adicionar formatação de cores
   function calculateStates() {
     console.log("Calculando estados...");
 
@@ -708,19 +896,33 @@ function initStateCalculator() {
     // Calcular estados possíveis
     const states = Math.pow(2, bits);
 
-    // Calcular tempos estimados (baseado na tabela fornecida)
+    // Calcular tempos estimados
     const classicalTime = getClassicalTime(bits);
     const quantumTime = getQuantumTime(bits);
 
-    // Calcular ganho
+    // Calcular ganho e equivalência
     const gain = getGainDescription(bits);
+    const equivalence = getEquivalenceDescription(bits);
 
     // Exibir resultados com formatação de números grandes
     bitResult.textContent = formatLargeNumber(states);
     qubitResult.textContent = formatLargeNumber(states);
+
+    // Adicionar informação sobre o tipo de processamento (sem formatação especial para sequencial)
+    const bitStatesInfo = document.getElementById("bit-states-info");
+    const qubitStatesInfo = document.getElementById("qubit-states-info");
+
+    if (bitStatesInfo) bitStatesInfo.innerHTML = "processamento sequencial";
+    if (qubitStatesInfo) qubitStatesInfo.innerHTML = "processamento <span class='simultaneous-processing'>simultâneo</span>";
+
     timeClassical.textContent = classicalTime;
     timeQuantum.textContent = quantumTime;
     gainResult.textContent = gain;
+
+    // Para elementos que aceitam HTML, usar innerHTML
+    if (equivalenceResult) {
+      equivalenceResult.innerHTML = equivalence;
+    }
 
     // Adicionar classe de ganho para estilização
     gainResult.className = "result-value " + getGainClass(bits);
@@ -739,14 +941,14 @@ function initStateCalculator() {
     if (bits <= 5) return "gain-none";
     if (bits <= 10) return "gain-minimal";
     if (bits <= 15) return "gain-low";
-    if (bits <= 20) return "gain-emerging";
-    if (bits <= 25) return "gain-notable";
-    if (bits <= 30) return "gain-high";
-    if (bits <= 35) return "gain-veryhigh";
-    if (bits <= 40) return "gain-enormous";
-    if (bits <= 54) return "gain-gigantic";
-    if (bits <= 70) return "gain-astronomical";
-    return "gain-incalculable";
+    if (bits <= 20) return "começa a surgir";
+    if (bits <= 25) return "notável";
+    if (bits <= 30) return "alto";
+    if (bits <= 35) return "muito alto";
+    if (bits <= 40) return "enorme";
+    if (bits <= 54) return "gigantesco";
+    if (bits <= 70) return "astronômico";
+    return "incalculável";
   }
 
   // Funções auxiliares para cálculos baseados na tabela fornecida
@@ -784,19 +986,6 @@ function initStateCalculator() {
     if (bits <= 54) return "Gigantesco";
     if (bits <= 70) return "Astronômico";
     return "Incalculável";
-  }
-
-  // Formatar números grandes com notação científica ou prefixos
-  function formatLargeNumber(num) {
-    if (num < 1000) return num.toString();
-    if (num < 1e6) return `${(num / 1e3).toFixed(1)} mil`;
-    if (num < 1e9) return `${(num / 1e6).toFixed(1)} milhões`;
-    if (num < 1e12) return `${(num / 1e9).toFixed(1)} bilhões`;
-    if (num < 1e15) return `${(num / 1e12).toFixed(1)} trilhões`;
-    if (num < 1e18) return `${(num / 1e15).toFixed(1)} quadrilhões`;
-    if (num < 1e21) return `${(num / 1e18).toFixed(1)} quintilhões`;
-    if (num < 1e24) return `${(num / 1e21).toFixed(1)} sextilhões`;
-    return `${num.toExponential(2)}`;
   }
 
   // Adicionar evento ao botão de calcular
@@ -945,129 +1134,569 @@ document
 // Adicionar estilos para a visualização melhorada da esfera no slide 3
 const qubitExtraStyle = document.createElement("style");
 qubitExtraStyle.textContent = `
-  .qubit-sphere {
-    overflow: visible;
-  }
-  
-  .qubit-meridian {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 5px rgba(100, 255, 218, 0.2);
-  }
-  
-  .qubit-equator {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
-  }
-  
-  .qubit-value-box {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: var(--accent-color);
-    font-size: 12px;
-    padding: 2px 5px;
-    border-radius: 3px;
-    transform: translate(-50%, -100%);
-    z-index: 100;
-    white-space: nowrap;
-    font-weight: bold;
-  }
-  
-  .qubit-dot {
-    box-shadow: 0 0 10px var(--accent-color), 0 0 15px white;
-    background: radial-gradient(circle at 30% 30%, white, var(--accent-color));
-  }
-`;
+    .qubit-sphere {
+      overflow: visible;
+    }
+    
+    .qubit-meridian {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 5px rgba(100, 255, 218, 0.2);
+    }
+    
+    .qubit-equator {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
+    }
+    
+    .qubit-value-box {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: var(--accent-color);
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      transform: translate(-50%, -100%);
+      z-index: 100;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+    
+    .qubit-dot {
+      box-shadow: 0 0 10px var(--accent-color), 0 0 15px white;
+      background: radial-gradient(circle at 30% 30%, white, var(--accent-color));
+    }
+  `;
 document.head.appendChild(qubitExtraStyle);
 
 // Adicionar estilo para os elementos da calculadora e resultados
 const calculatorStyle = document.createElement("style");
 calculatorStyle.textContent = `
-  .state-calculator {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 20px;
-    border: 1px solid rgba(100, 255, 218, 0.2);
+    .state-calculator {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      border: 1px solid rgba(100, 255, 218, 0.2);
+    }
+    
+    .calculator-inputs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .input-group input {
+      width: 60px;
+      background-color: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--accent-color);
+      color: white;
+      padding: 5px 8px;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 16px;
+    }
+    
+    .calculate-button {
+      background-color: var(--accent-color);
+      color: var(--primary-color);
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    
+    .calculate-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(100, 255, 218, 0.4);
+    }
+    
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      table-layout: fixed;
+    }
+    
+    .results-table th, .results-table td {
+      border: 1px solid rgba(100, 255, 218, 0.3);
+      padding: 8px;
+      text-align: center;
+    }
+    
+    .results-table th {
+      background-color: rgba(0, 0, 0, 0.4);
+      color: var(--accent-color);
+    }
+    
+    .result-value {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    
+    @keyframes highlight-result {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(100, 255, 218, 0.2); }
+    }
+  `;
+document.head.appendChild(calculatorStyle);
+
+// Inicializar os gráficos comparativos no novo slide
+function initComparisonGraphs() {
+  const classicalGraph = document.getElementById("classicalGraph");
+  const quantumGraph = document.getElementById("quantumGraph");
+
+  if (!classicalGraph || !quantumGraph) {
+    console.error("Gráficos não encontrados");
+    return;
+  }
+
+  // Gerar pontos para o gráfico clássico (crescimento linear)
+  const classicalPath = generateClassicalPath();
+  classicalGraph.setAttribute("d", classicalPath.path);
+
+  // Gerar pontos para o gráfico quântico (crescimento exponencial)
+  const quantumPath = generateQuantumPath();
+  quantumGraph.setAttribute("d", quantumPath.path);
+
+  // Adicionar área de superposição no gráfico quântico
+  const quantumArea = document.getElementById("quantumArea");
+  if (quantumArea) {
+    quantumArea.setAttribute("d", quantumPath.area);
+  }
+
+  // Adicionar indicadores interativos para os gráficos
+  const classicalContainer = document.getElementById("classicalGraphContainer");
+  const quantumContainer = document.getElementById("quantumGraphContainer");
+
+  if (classicalContainer && quantumContainer) {
+    console.log(
+      "Containers dos gráficos encontrados, inicializando interatividade"
+    );
+
+    // Remover pontos e tooltips existentes se houver
+    classicalContainer
+      .querySelectorAll(".graph-point, .graph-tooltip")
+      .forEach((el) => el.remove());
+    quantumContainer
+      .querySelectorAll(".graph-point, .graph-tooltip")
+      .forEach((el) => el.remove());
+
+    // Criar elementos para mostrar pontos nos gráficos
+    const classicalPoint = document.createElement("div");
+    classicalPoint.className = "graph-point classical-point";
+    classicalContainer.appendChild(classicalPoint);
+
+    const quantumPoint = document.createElement("div");
+    quantumPoint.className = "graph-point quantum-point";
+    quantumContainer.appendChild(quantumPoint);
+
+    // Criar tooltips para mostrar valores
+    const classicalTooltip = document.createElement("div");
+    classicalTooltip.className = "graph-tooltip classical-tooltip";
+    classicalContainer.appendChild(classicalTooltip);
+
+    const quantumTooltip = document.createElement("div");
+    quantumTooltip.className = "graph-tooltip quantum-tooltip";
+    quantumContainer.appendChild(quantumTooltip);
+
+    // Interatividade ao passar o mouse sobre os containers
+    [classicalContainer, quantumContainer].forEach((container, index) => {
+      const isClassical = index === 0;
+      const point = isClassical ? classicalPoint : quantumPoint;
+      const tooltip = isClassical ? classicalTooltip : quantumTooltip;
+      const otherPoint = isClassical ? quantumPoint : classicalPoint;
+      const otherTooltip = isClassical ? quantumTooltip : classicalTooltip;
+
+      container.addEventListener("mousemove", (e) => {
+        // Coordenadas do mouse relativas ao container
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const width = rect.width;
+
+        // Calcular a posição relativa (0-1)
+        const relativeX = Math.max(0, Math.min(1, x / width));
+
+        // Obter valores para este ponto
+        const bits = Math.floor(1 + relativeX * 70); // 1-70 bits/qubits
+        const classicalValue = getClassicalValue(relativeX);
+        const quantumValue = getQuantumValue(relativeX);
+
+        // Posicionar o ponto e o outro ponto correspondente
+        updatePoint(
+          point,
+          relativeX,
+          isClassical ? classicalValue : quantumValue,
+          container
+        );
+        updatePoint(
+          otherPoint,
+          relativeX,
+          isClassical ? quantumValue : classicalValue,
+          isClassical ? quantumContainer : classicalContainer
+        );
+
+        // Atualizar tooltip
+        updateTooltip(
+          tooltip,
+          bits,
+          isClassical ? classicalValue : quantumValue,
+          isClassical
+        );
+        updateTooltip(
+          otherTooltip,
+          bits,
+          isClassical ? quantumValue : classicalValue,
+          !isClassical
+        );
+
+        // Mostrar os pontos e tooltips - forçar display block e opacity 1
+        point.style.display = "block";
+        point.style.opacity = "1";
+        tooltip.style.display = "block";
+        tooltip.style.opacity = "1";
+        otherPoint.style.display = "block";
+        otherPoint.style.opacity = "1";
+        otherTooltip.style.display = "block";
+        otherTooltip.style.opacity = "1";
+      });
+
+      container.addEventListener("mouseleave", () => {
+        point.style.opacity = "0";
+        tooltip.style.opacity = "0";
+        otherPoint.style.opacity = "0";
+        otherTooltip.style.opacity = "0";
+
+        // Ocultar completamente após a transição
+        setTimeout(() => {
+          point.style.display = "none";
+          tooltip.style.display = "none";
+          otherPoint.style.display = "none";
+          otherTooltip.style.display = "none";
+        }, 200);
+      });
+    });
+  } else {
+    console.error("Containers dos gráficos não encontrados");
+  }
+}
+
+function generateClassicalPath() {
+  const width = 100;
+  const height = 220;
+  const points = 20; // Aumentar o número de pontos para linha mais suave
+
+  let path = `M 0,${height}`;
+
+  // Crescimento linear
+  for (let i = 0; i <= points; i++) {
+    const x = (i / points) * width;
+    const y = height - (i / points) * height * 0.8; // 80% da altura total
+    path += ` L ${x},${y}`;
+  }
+
+  return { path };
+}
+
+// Modificar a função generateQuantumPath para ter crescimento mais rápido e evidente
+function generateQuantumPath() {
+  const width = 100;
+  const height = 220;
+  const points = 30; // Mais pontos para curva mais suave
+
+  let path = `M 0,${height}`;
+  let area = `M 0,${height}`;
+
+  // Crescimento exponencial mais acentuado desde o início
+  for (let i = 0; i <= points; i++) {
+    const x = (i / points) * width;
+
+    // Usar uma função exponencial mais agressiva que cresce desde o início
+    // A base 2.5 faz crescer mais rapidamente que a original
+    const factor = Math.pow(2.5, (i / points) * 6) - 1;
+    const maxFactor = Math.pow(2.5, 6) - 1;
+
+    const normalizedFactor = Math.min(factor / maxFactor, 1); // Garantir que não ultrapasse 1
+    const y = height - normalizedFactor * height;
+
+    path += ` L ${x},${y}`;
+    area += ` L ${x},${y}`;
+  }
+
+  // Completar a área
+  area += ` L ${width},${height} L 0,${height}`;
+
+  return { path, area };
+}
+
+function getClassicalValue(relativeX) {
+  // Crescimento linear: 0 a 0.8 (80% da altura)
+  return relativeX * 0.8;
+}
+
+// Modificar a função getQuantumValue para usar a mesma fórmula atualizada
+function getQuantumValue(relativeX) {
+  // Usar a mesma função exponencial da geração do gráfico
+  const factor = Math.pow(2.5, relativeX * 6) - 1;
+  const maxFactor = Math.pow(2.5, 6) - 1;
+  return Math.min(1, factor / maxFactor);
+}
+
+function updatePoint(point, relativeX, relativeY, container) {
+  if (!point || !container) return;
+
+  const rect = container.getBoundingClientRect();
+  const x = relativeX * rect.width;
+  const y = (1 - relativeY) * rect.height;
+
+  point.style.left = `${x}px`;
+  point.style.top = `${y}px`;
+}
+
+// Modificar a função updateTooltip para garantir que não ocorra erro quando point for null
+function updateTooltip(tooltip, bits, value, isClassical) {
+  if (!tooltip) return;
+
+  // Calcular estados possíveis
+  const statesCount = Math.pow(2, bits);
+  const formattedStates = formatLargeNumber(statesCount);
+
+  // Determinar o tempo estimado para processamento
+  const time = isClassical ? getClassicalTime(bits) : getQuantumTime(bits);
+
+  // Mudar o texto conforme seja clássico ou quântico
+  let tooltipText;
+  if (isClassical) {
+    tooltipText = `<strong>${bits} bits:</strong><br>${formattedStates} estados<br>${time}`;
+  } else {
+    tooltipText = `<strong>${bits} qubits:</strong><br>${formattedStates} estados<br>${time}`;
+  }
+
+  tooltip.innerHTML = tooltipText;
+
+  // Posicionar tooltip próximo ao ponto - CORREÇÃO PARA EVITAR ERRO
+  const point = tooltip.parentElement?.querySelector(".graph-point");
+  if (!point) return;
+
+  // Usar valores padrão se não houver left/top definidos
+  const left = parseFloat(point.style.left || "0");
+  const top = parseFloat(point.style.top || "0");
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top - 30}px`;
+}
+
+// Melhorar o posicionamento dos meridianos e eixos do qubit
+function fixQubitAxes() {
+  const qubitSphere = document.getElementById("qubitSphere");
+  if (!qubitSphere) return;
+
+  // Remover eixos antigos se existirem
+  qubitSphere.querySelectorAll(".qubit-axis").forEach((axis) => axis.remove());
+
+  // Adicionar eixos corretamente posicionados
+  const axes = `
+      <div class="qubit-axis x-axis"></div>
+      <div class="qubit-axis y-axis"></div>
+      <div class="qubit-axis z-axis"></div>
+    `;
+
+  qubitSphere.insertAdjacentHTML("beforeend", axes);
+
+  // Posicionar os eixos corretamente
+  const width = qubitSphere.offsetWidth;
+  const height = qubitSphere.offsetHeight;
+
+  // Obter os eixos
+  const xAxis = qubitSphere.querySelector(".x-axis");
+  const yAxis = qubitSphere.querySelector(".y-axis");
+  const zAxis = qubitSphere.querySelector(".z-axis");
+
+  // Ajustar os eixos
+  if (xAxis && yAxis && zAxis) {
+    // Eixo X - horizontal
+    xAxis.style.width = `${width}px`;
+    xAxis.style.height = "2px";
+    xAxis.style.top = `${height / 2}px`;
+    xAxis.style.left = "0";
+    xAxis.style.transform = "none";
+    xAxis.style.backgroundColor = "rgba(255, 100, 100, 0.7)"; // Eixo X em vermelho
+    xAxis.insertAdjacentHTML("beforeend", '<span class="axis-label">X</span>');
+
+    // Eixo Y - vertical (conectando 0 e 1)
+    yAxis.style.width = "2px";
+    yAxis.style.height = `${height}px`;
+    yAxis.style.top = "0";
+    yAxis.style.left = `${width / 2}px`;
+    yAxis.style.transform = "none";
+    yAxis.style.backgroundColor = "rgba(100, 255, 100, 0.7)"; // Eixo Y em verde
+    yAxis.insertAdjacentHTML("beforeend", '<span class="axis-label">Y</span>');
+
+    // Eixo Z - saindo da tela a partir do centro (não da base)
+    zAxis.style.width = "2px";
+    zAxis.style.height = `${width}px`;
+    zAxis.style.top = `${height / 2 - width / 2}px`; // Centralizado na esfera
+    zAxis.style.left = `${width / 2}px`;
+    zAxis.style.transform = "rotateX(90deg)";
+    zAxis.style.backgroundColor = "rgba(100, 100, 255, 0.7)"; // Eixo Z em azul
+    zAxis.insertAdjacentHTML("beforeend", '<span class="axis-label">Z</span>');
+}
+
+// Função para verificar todos os slides disponíveis
+function checkAllSlides() {
+  console.log("Verificando slides disponíveis:");
+  const slides = document.querySelectorAll(".slide");
+  console.log(`Total de slides encontrados: ${slides.length}`);
+  
+  slides.forEach(slide => {
+    console.log(`ID: ${slide.id}, Visível: ${slide.classList.contains("active")}`);
+  });
+  
+  // Verificar especificamente o slide de referências
+  const lastSlide = document.getElementById(`slide${totalSlides}`);
+  if (lastSlide) {
+    console.log(`O último slide (slide${totalSlides}) existe no DOM.`);
+  } else {
+    console.error(`O último slide (slide${totalSlides}) NÃO existe no DOM!`);
+    console.log(`Verificando outros possíveis slides numerados...`);
+    // Verificar slides com números próximos
+    for (let i = totalSlides - 2; i <= totalSlides + 2; i++) {
+      const testSlide = document.getElementById(`slide${i}`);
+      if (testSlide) {
+        console.log(`Slide${i} encontrado.`);
+      }
+    }
+  }
+}
+
+// Verificar slides quando a página carregar
+document.addEventListener("DOMContentLoaded", () => {
+  initSlides();
+  initBlochSphere();
+
+  // Inicializar a animação do qubit no segundo slide
+  animateQubitArrow();
+
+  // Inicializar bits e qubits se o slide atual for o slide 3
+  if (currentSlide === 3) {
+    initBitsQubits();
+    initScaleComparison();
+  }
+
+  // Adicionar efeitos para a tabela comparativa
+  const tableRows = document.querySelectorAll(".bit-qubit-table tbody tr");
+  tableRows.forEach((row, index) => {
+    row.style.opacity = "0";
+    row.style.transform = "translateY(20px)";
+
+    setTimeout(() => {
+      row.style.transition = "all 0.5s ease";
+      row.style.opacity = "1";
+      row.style.transform = "translateY(0)";
+    }, index * 200 + 1000);
+  });
+
+  // Adicionar verificação de slides
+  checkAllSlides();
+  
+  // Adicionar classes de estilo para o processamento no slide 3
+  const bitStatesInfo = document.getElementById("bit-states-info");
+  const qubitStatesInfo = document.getElementById("qubit-states-info");
+  
+  if (bitStatesInfo) {
+    bitStatesInfo.innerHTML = "processamento <span class='sequential-processing'>sequencial</span>";
   }
   
-  .calculator-inputs {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
+  if (qubitStatesInfo) {
+    qubitStatesInfo.innerHTML = "processamento <span class='simultaneous-processing'>simultâneo</span>";
   }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+});
+
+// Melhorar a função changeSlide para ser mais robusta
+function changeSlide(newSlide) {
+  console.log(`Tentando mudar para o slide ${newSlide}`);
+
+  // Tentar encontrar o slide atual e remover a classe active
+  const currentSlideElement = document.getElementById(`slide${currentSlide}`);
+  if (!currentSlideElement) {
+    console.error(`Slide atual (${currentSlide}) não encontrado no DOM.`);
+  } else {
+    currentSlideElement.classList.remove("active");
   }
-  
-  .input-group input {
-    width: 60px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--accent-color);
-    color: white;
-    padding: 5px 8px;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 16px;
+
+  // Atualizar slide atual
+  currentSlide = newSlide;
+
+  // Tentar encontrar o novo slide
+  const nextSlideElement = document.getElementById(`slide${currentSlide}`);
+  if (!nextSlideElement) {
+    console.error(`Novo slide (${currentSlide}) não encontrado no DOM.`);
+    // Tentar recuperar para o primeiro slide
+    currentSlide = 1;
+    const firstSlide = document.getElementById("slide1");
+    if (firstSlide) firstSlide.classList.add("active");
+  } else {
+    nextSlideElement.classList.add("active");
   }
-  
-  .calculate-button {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
-    border: none;
-    padding: 5px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+
+  // Atualizar a barra de progresso
+  updateProgressBar();
+
+  // Se for slide 4, reiniciar as animações das barras com velocidade reduzida
+  if (newSlide === 4) {
+    // Selecionamos as barras e removemos qualquer animação anterior
+    const bars = document.querySelectorAll(".bar");
+    bars.forEach((bar) => {
+      bar.style.animation = "none";
+      // Forçar reflow para reiniciar a animação
+      void bar.offsetWidth;
+
+      // Aplicar animações mais lentas
+      setTimeout(() => {
+        if (bar.classList.contains("classic")) {
+          bar.style.animation = "fillBar 3s forwards ease-in-out"; // 3s em vez de 1.5s
+        } else if (bar.classList.contains("quantum")) {
+          bar.style.animation = "fillBarQuantum 3s forwards ease-in-out"; // 3s em vez de 1.5s
+        }
+      }, 10);
+    });
+  }
+
+  console.log(`Navegou para o slide ${currentSlide}`);
+}
+
+// Adicionar CSS específico para destacar processamento sequencial e paralelo
+const processingStyles = document.createElement("style");
+processingStyles.textContent = `
+  .sequential-processing {
+    color: #ff7675;
     font-weight: bold;
-    transition: all 0.2s;
   }
   
-  .calculate-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(100, 255, 218, 0.4);
-  }
-  
-  .results-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    table-layout: fixed;
-  }
-  
-  .results-table th, .results-table td {
-    border: 1px solid rgba(100, 255, 218, 0.3);
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .results-table th {
-    background-color: rgba(0, 0, 0, 0.4);
+  .simultaneous-processing {
     color: var(--accent-color);
-  }
-  
-  .result-value {
     font-weight: bold;
-    color: var(--accent-color);
-  }
-  
-  @keyframes highlight-result {
-    0%, 100% { background-color: transparent; }
-    50% { background-color: rgba(100, 255, 218, 0.2); }
   }
 `;
-document.head.appendChild(calculatorStyle);
+document.head.appendChild(processingStyles);
+}

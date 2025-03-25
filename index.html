@@ -168,7 +168,7 @@
         </div>
       </section>
 
-      <!-- Slide 3: Bits vs Qubits -->
+      <!-- Slide 3: Bits vs Qubits - Destaque para termos específicos -->
       <section class="slide" id="slide3">
         <div class="content">
           <h2>Bits vs Qubits: Uma Nova Era</h2>
@@ -182,49 +182,64 @@
                 <div class="bit" id="bit4">1</div>
               </div>
               <ul class="comparison-list">
-                <li><strong>Estados:</strong> Binário (0 ou 1)</li>
+                <li>
+                  <strong>Estados:</strong> Binário (<span
+                    class="classical-highlight"
+                    >0 ou 1</span
+                  >)
+                </li>
                 <li>
                   <strong>Representação:</strong> Transistores ligados ou
                   desligados
                 </li>
-                <li><strong>Processamento:</strong> Sequencial</li>
+                <li>
+                  <strong>Processamento:</strong>
+                  <span class="classical-highlight">Sequencial</span>
+                </li>
                 <li>
                   <strong>Escala:</strong> Linear (n bits = 2<sup>n</sup>
                   estados)
                 </li>
               </ul>
             </div>
+
             <div class="divider">VS</div>
+
             <div class="bit-qubit-column">
               <h3>Computação Quântica: QUBITS</h3>
               <div class="qubit-sphere-container">
                 <div class="qubit-sphere" id="qubitSphere">
                   <div class="qubit-dot" id="qubitState"></div>
-                  <div class="qubit-axis x-axis"></div>
-                  <div class="qubit-axis y-axis"></div>
-                  <div class="qubit-axis z-axis"></div>
                   <div class="qubit-label zero-state">|0⟩</div>
                   <div class="qubit-label one-state">|1⟩</div>
                 </div>
               </div>
               <ul class="comparison-list">
                 <li>
-                  <strong>Estados:</strong> Superposição (0, 1 e combinações)
+                  <strong>Estados:</strong>
+                  <span class="superposition-highlight">Superposição</span> (0,
+                  1 e combinações)
                 </li>
                 <li><strong>Representação:</strong> Esfera de Bloch</li>
-                <li><strong>Processamento:</strong> Paralelo</li>
+                <li>
+                  <strong>Processamento:</strong>
+                  <span class="superposition-highlight">Paralelo</span>
+                </li>
                 <li>
                   <strong>Escala:</strong> Exponencial (n qubits = 2<sup>n</sup>
-                  superposições)
+                  <span class="superposition-highlight">superposições</span>)
                 </li>
               </ul>
             </div>
           </div>
 
-          <!-- Calculadora de bits/qubits - Corrigida -->
+          <!-- Calculadora de bits/qubits com linha de equivalência -->
           <div class="state-calculator">
             <h3>Calculadora de Estados</h3>
-            <p>Compare a capacidade de processamento entre bits e qubits:</p>
+            <p>
+              Compare a capacidade de processamento entre bits e qubits graças à
+              <span class="superposition-highlight">superposição</span>:
+            </p>
 
             <div class="calculator-inputs">
               <div class="input-group">
@@ -246,129 +261,165 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>Computador Clássico</th>
-                  <th>Computador Quântico</th>
+                  <th>Bits Clássicos</th>
+                  <th>Qubits</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Estados possíveis</td>
-                  <td><span id="bit-states" class="result-value">32</span></td>
-                  <td>
-                    <span id="qubit-states" class="result-value">32</span>
+                  <td><strong>Estados possíveis</strong></td>
+                  <td id="bit-states" class="result-value">2^n</td>
+                  <td id="qubit-states" class="result-value">2^n</td>
+                </tr>
+                <tr>
+                  <td><strong>Tipo de processamento</strong></td>
+                  <td id="bit-states-info" class="result-info">
+                    processamento sequencial
+                  </td>
+                  <td id="qubit-states-info" class="result-info">
+                    processamento simultâneo
                   </td>
                 </tr>
                 <tr>
-                  <td>Tempo de processamento</td>
-                  <td>
-                    <span id="time-classical" class="result-value"
-                      >~instantâneo</span
-                    >
-                  </td>
-                  <td>
-                    <span id="time-quantum" class="result-value"
-                      >instantâneo</span
-                    >
-                  </td>
+                  <td><strong>Tempo estimado</strong></td>
+                  <td id="time-classical" class="result-value">-</td>
+                  <td id="time-quantum" class="result-value">-</td>
                 </tr>
                 <tr>
-                  <td>Ganho de eficiência</td>
-                  <td colspan="2">
-                    <span id="gain-result" class="result-value gain-none"
-                      >Nenhum</span
-                    >
+                  <td><strong>Ganho quântico</strong></td>
+                  <td colspan="2" id="gain-result" class="result-value">-</td>
+                </tr>
+                <tr class="equivalence-row">
+                  <td
+                    colspan="3"
+                    id="qubit-equivalence"
+                    class="equivalence-description"
+                  >
+                    -
                   </td>
                 </tr>
               </tbody>
             </table>
+
+            <div class="calculator-note">
+              <p>
+                <strong>Nota:</strong> Cada qubit adicional dobra a capacidade
+                simultânea de processamento, o que significa que a partir de
+                poucas dezenas de qubits, já temos um ganho impossível de ser
+                reproduzido com computadores clássicos atuais. A escala é
+                exponencial, permitindo aos qubits resolverem problemas
+                extremamente complexos em tempo viável.
+              </p>
+            </div>
           </div>
 
-          <div class="slide-number">3/10</div>
+          <div class="slide-number">3/11</div>
         </div>
       </section>
 
-      <!-- Slide 4: Escalabilidade Quântica -->
+      <!-- Slide 4: Escalabilidade Quântica - Substituição das barras por comparação de tempo -->
       <section class="slide" id="slide4">
         <div class="content">
-          <h2>Escalabilidade Exponencial</h2>
-          <p>
-            A comparação entre computadores clássicos e quânticos mostra um
-            ganho de poder computacional que cresce exponencialmente com o
-            número de qubits:
-          </p>
+          <h2>Tempo de Processamento: Crescimento Exponencial</h2>
 
-          <div class="scale-comparison">
-            <h3>Comparação de Escalabilidade</h3>
-            <div class="scale-chart">
-              <!-- Barras para 2 bits/qubits -->
-              <div class="scale-row">
-                <div class="units">2 bits/qubits</div>
-                <div class="scale-bar classical scale-tiny">
-                  <span>4 estados</span>
+          <!-- Nova visualização de corrida de tempo -->
+          <div class="time-race-container">
+            <div class="time-race-header">
+              <h3>Desafio de Processamento: Clássico vs. Quântico</h3>
+              <p>
+                O gráfico abaixo demonstra como o tempo de processamento cresce
+                drasticamente diferente entre os dois sistemas.
+              </p>
+            </div>
+
+            <div class="race-tracks">
+              <div class="race-track classical">
+                <div class="racer-label">Clássico</div>
+                <div class="racer-container">
+                  <div class="racer classic-racer">
+                    <i class="fas fa-desktop"></i>
+                  </div>
+                  <div class="progress-path">
+                    <div class="milestone" data-bits="10">10 bits</div>
+                    <div class="milestone" data-bits="20">20 bits</div>
+                    <div class="milestone" data-bits="30">30 bits</div>
+                    <div class="milestone" data-bits="40">40 bits</div>
+                    <div class="milestone" data-bits="50">50 bits</div>
+                  </div>
                 </div>
-                <div class="scale-bar quantum scale-tiny">
-                  <span>4 estados</span>
-                </div>
-              </div>
-              <!-- Barras para 5 bits/qubits -->
-              <div class="scale-row">
-                <div class="units">5 bits/qubits</div>
-                <div class="scale-bar classical scale-small">
-                  <span>32 estados</span>
-                </div>
-                <div class="scale-bar quantum scale-small">
-                  <span>32 estados</span>
-                </div>
-              </div>
-              <!-- Barras para 15 bits/qubits -->
-              <div class="scale-row">
-                <div class="units">15 bits/qubits</div>
-                <div class="scale-bar classical scale-medium">
-                  <span>32.768 estados</span>
-                </div>
-                <div class="scale-bar quantum scale-medium">
-                  <span>32.768 estados</span>
+                <div class="time-indicator">
+                  Tempo: <span id="classic-time">0.00s</span>
                 </div>
               </div>
-              <!-- Barras para 30 bits/qubits -->
-              <div class="scale-row">
-                <div class="units">30 bits/qubits</div>
-                <div class="scale-bar classical scale-large">
-                  <span>1 bilhão de estados</span>
+
+              <div class="race-track quantum">
+                <div class="racer-label">Quântico</div>
+                <div class="racer-container">
+                  <div class="racer quantum-racer">
+                    <i class="fas fa-atom"></i>
+                  </div>
+                  <div class="progress-path">
+                    <div class="milestone" data-bits="10">10 qubits</div>
+                    <div class="milestone" data-bits="20">20 qubits</div>
+                    <div class="milestone" data-bits="30">30 qubits</div>
+                    <div class="milestone" data-bits="40">40 qubits</div>
+                    <div class="milestone" data-bits="50">50 qubits</div>
+                  </div>
                 </div>
-                <div class="scale-bar quantum scale-large">
-                  <span>1 bilhão de estados</span>
-                </div>
-              </div>
-              <!-- Barras para 45 bits/qubits -->
-              <div class="scale-row">
-                <div class="units">45 bits/qubits</div>
-                <div class="scale-bar classical scale-xlarge">
-                  <span>35 trilhões</span>
-                </div>
-                <div class="scale-bar quantum quantum-huge">
-                  <span>35 trilhões</span>
-                </div>
-              </div>
-              <!-- Barras para 60 bits/qubits - Ajustado para maior contraste -->
-              <div class="scale-row">
-                <div class="units">60 bits/qubits</div>
-                <div class="scale-bar classical-tiny">
-                  <span>1 quintilhão</span>
-                </div>
-                <div class="scale-bar quantum quantum-massive">
-                  <span>1 quintilhão</span>
+                <div class="time-indicator">
+                  Tempo: <span id="quantum-time">0.00s</span>
                 </div>
               </div>
-              <!-- Barras para 100 bits/qubits (opcional, pode ficar muito grande) -->
-              <div class="scale-row">
-                <div class="units">100 bits/qubits</div>
-                <div class="scale-bar classical-dot">
-                  <span>~10³⁰</span>
-                </div>
-                <div class="scale-bar quantum-extreme">
-                  <span>~10³⁰ estados</span>
-                </div>
+            </div>
+
+            <div class="race-controls">
+              <button id="start-race" class="race-button">
+                <i class="fas fa-play"></i> Iniciar Simulação
+              </button>
+              <button id="reset-race" class="race-button">
+                <i class="fas fa-redo"></i> Reiniciar
+              </button>
+              <div class="bits-selector">
+                <label for="max-bits">Complexidade do problema:</label>
+                <select id="max-bits">
+                  <option value="30">30 bits/qubits - Médio</option>
+                  <option value="40">40 bits/qubits - Difícil</option>
+                  <option value="50" selected>50 bits/qubits - Extremo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="race-results">
+              <div class="result-box">
+                <div class="result-title">Tempo Clássico</div>
+                <div id="classic-result" class="result-value">--</div>
+              </div>
+              <div class="result-box">
+                <div class="result-title">Tempo Quântico</div>
+                <div id="quantum-result" class="result-value">--</div>
+              </div>
+              <div class="result-box wide">
+                <div class="result-title">Ganho de Velocidade</div>
+                <div id="speedup-result" class="result-value">--</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nova visualização de comparação de tempo (mantida) -->
+          <div class="time-comparison">
+            <h3>Comparação de Tempo de Processamento</h3>
+            <div class="time-comparison-container">
+              <!-- Conteúdo gerado dinamicamente pelo JavaScript -->
+            </div>
+
+            <div class="time-comparison-legend">
+              <div class="legend-item">
+                <div class="legend-color classical-color"></div>
+                <span>Computação Clássica - tempo cresce exponencialmente</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color quantum-color"></div>
+                <span>Computação Quântica - tempo permanece gerenciável</span>
               </div>
             </div>
           </div>
@@ -441,12 +492,130 @@
             </div>
           </div>
 
-          <div class="slide-number">4/10</div>
+          <div class="slide-number">4/11</div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Gráficos Comparativos - Corrigindo os IDs e contêineres -->
+      <section class="slide" id="slide5">
+        <div class="content">
+          <h2>Poder Computacional: A Diferença da Superposição</h2>
+
+          <div class="graphs-container">
+            <div class="graph-row">
+              <div class="graph-column">
+                <h3 class="graph-title">Computadores Clássicos</h3>
+                <div class="graph-container" id="classicalGraphContainer">
+                  <div class="graph-axis x-axis"></div>
+                  <div class="graph-axis y-axis"></div>
+                  <div class="graph-label x-label">Número de bits (n)</div>
+                  <div class="graph-label y-label">Poder computacional</div>
+                  <div class="graph-line">
+                    <svg
+                      width="100%"
+                      height="100%"
+                      viewBox="0 0 100 220"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        id="classicalGraph"
+                        class="classical-line"
+                        d=""
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="graph-legend">
+                  <div class="legend-item">
+                    <div class="legend-color classical-color"></div>
+                    <span>Crescimento Linear</span>
+                  </div>
+                </div>
+                <p>
+                  Processamento
+                  <strong class="classical-highlight">sequencial</strong> - um
+                  estado de cada vez
+                </p>
+              </div>
+
+              <div class="graph-column">
+                <h3 class="graph-title">Computadores Quânticos</h3>
+                <div class="graph-container" id="quantumGraphContainer">
+                  <div class="graph-axis x-axis"></div>
+                  <div class="graph-axis y-axis"></div>
+                  <div class="graph-label x-label">Número de qubits (n)</div>
+                  <div class="graph-label y-label">Poder computacional</div>
+                  <div class="graph-line">
+                    <svg
+                      width="100%"
+                      height="100%"
+                      viewBox="0 0 100 220"
+                      preserveAspectRatio="none"
+                    >
+                      <path id="quantumArea" class="quantum-area" d=""></path>
+                      <path id="quantumGraph" class="quantum-line" d=""></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="graph-legend">
+                  <div class="legend-item">
+                    <div class="legend-color quantum-color"></div>
+                    <span>Crescimento Exponencial</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-color superposition-color"></div>
+                    <span>Área de Superposição</span>
+                  </div>
+                </div>
+                <p>
+                  Processamento
+                  <strong class="superposition-highlight">paralelo</strong> -
+                  todos os estados simultaneamente
+                </p>
+              </div>
+            </div>
+
+            <div class="comparison-tip">
+              <p>
+                <strong>Dica:</strong> Passe o mouse sobre os gráficos para
+                comparar bits e qubits equivalentes!
+              </p>
+            </div>
+
+            <div class="conclusion-box">
+              <h3 class="conclusion-title">⚡️ Conclusão</h3>
+              <p>
+                Tanto bits quanto qubits têm a mesma escala matemática
+                (2<sup>n</sup>), porém:
+              </p>
+              <ul>
+                <li>
+                  Bits clássicos precisam processar
+                  <strong class="classical-highlight">sequencialmente</strong>
+                  cada estado
+                </li>
+                <li>
+                  Qubits podem processar
+                  <strong class="superposition-highlight"
+                    >simultaneamente</strong
+                  >
+                  todos os estados graças à superposição
+                </li>
+              </ul>
+              <p>
+                Essa capacidade de superposição permite que computadores
+                quânticos resolvam problemas complexos em um tempo razoável, que
+                seriam inviáveis para computadores clássicos.
+              </p>
+            </div>
+          </div>
+
+          <div class="slide-number">5/11</div>
         </div>
       </section>
 
       <!-- Slide 5: Objetivos (anteriormente slide 4) -->
-      <section class="slide" id="slide5">
+      <section class="slide" id="slide6">
         <div class="content">
           <h2>Objetivos da Tecnologia</h2>
           <div class="objective-grid">
@@ -485,12 +654,12 @@
               </p>
             </div>
           </div>
-          <div class="slide-number">5/10</div>
+          <div class="slide-number">6/11</div>
         </div>
       </section>
 
       <!-- Slide 6: Vantagens (anteriormente slide 5) -->
-      <section class="slide" id="slide6">
+      <section class="slide" id="slide7">
         <div class="content">
           <h2>Vantagens do Uso</h2>
           <div class="advantages-container">
@@ -529,12 +698,12 @@
               </div>
             </div>
           </div>
-          <div class="slide-number">6/10</div>
+          <div class="slide-number">7/11</div>
         </div>
       </section>
 
       <!-- Slide 7: Instituições (anteriormente slide 6) -->
-      <section class="slide" id="slide7">
+      <section class="slide" id="slide8">
         <div class="content">
           <h2>Instituições Principais</h2>
           <div class="institutions-section">
@@ -586,12 +755,12 @@
               </ul>
             </div>
           </div>
-          <div class="slide-number">7/10</div>
+          <div class="slide-number">8/11</div>
         </div>
       </section>
 
       <!-- Slide 8: Casos de Utilização (anteriormente slide 7) -->
-      <section class="slide" id="slide8">
+      <section class="slide" id="slide9">
         <div class="content">
           <h2>Casos de Utilização</h2>
           <div class="case-studies">
@@ -660,12 +829,12 @@
               </p>
             </div>
           </div>
-          <div class="slide-number">8/10</div>
+          <div class="slide-number">9/11</div>
         </div>
       </section>
 
       <!-- Slide 9: Caso Microsoft (anteriormente slide 8) -->
-      <section class="slide" id="slide9">
+      <section class="slide" id="slide10">
         <div class="content">
           <h2>Microsoft Majorana 1</h2>
           <div class="two-columns">
@@ -741,50 +910,61 @@
               </div>
             </div>
           </div>
-          <div class="slide-number">9/10</div>
+          <div class="slide-number">10/11</div>
         </div>
       </section>
 
-      <!-- Slide 10: Referências (anteriormente slide 9) -->
-      <section class="slide" id="slide10">
+      <!-- Slide 10: Referências Bibliográficas -->
+      <section class="slide" id="slide11">
         <div class="content">
           <h2>Referências Bibliográficas</h2>
+
           <div class="references">
-            <ul class="reference-list">
+            <ol class="reference-list">
               <li>
                 "Microsoft unveils Majorana 1, the world's first quantum
                 processor powered by topological qubits," Microsoft Azure
                 Quantum Blog, 19 de fevereiro de 2025.
               </li>
+
               <li>
                 Akhtar, M., et al. "Interferometric single-shot parity
                 measurement in InAs–Al hybrid devices," Nature, 638, 651-655
                 (2025).
               </li>
+
               <li>
                 "Quantum computing," Wikipedia, acessado em 24 de março de 2025.
               </li>
+
               <li>
                 "What is Quantum Computing?" IBM, acessado em 24 de março de
                 2025.
               </li>
+
               <li>
                 Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and
                 Quantum Information. Cambridge University Press.
               </li>
+
               <li>
                 "DOE Explains...Quantum Computing," Departamento de Energia dos
                 EUA, acessado em 24 de março de 2025.
               </li>
-            </ul>
+            </ol>
           </div>
-          <div class="slide-number">10/10</div>
+
+          <div class="highlight-box">
+            <p>
+              Para mais informações sobre o projeto Majorana da Microsoft e
+              avanços recentes em computação quântica topológica, visite o site
+              oficial da Microsoft Quantum Research.
+            </p>
+          </div>
+
+          <div class="slide-number">10/11</div>
         </div>
-
-
-
-
-</html>  </body>    </div>      </section>      </section>
+      </section>
     </div>
 
     <script src="script.js"></script>
